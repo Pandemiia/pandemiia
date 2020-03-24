@@ -14,13 +14,13 @@
     <meta property="og:description" content="Допомагайте лікарям постачаючи засоби захисту, медикаменти, обладнання" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://pandemiia.herokuapp.com/" />
-    <meta property="og:image" content="https://pandemiia.herokuapp.com/static/comparison/img/homepage.png" />
+    <meta property="og:image" content="https://pandemiia.herokuapp.com/static/landing/img/homepage.png" />
     <meta property="og:locale" content="ua_UA" />
     <meta property="fb:app_id" content="743295962826192" /> -->
 
     <!-- Favicons -->
-    <link href="{% static 'comparison/img/favicon.ico' %}" rel="icon">
-    <link href="{% static 'comparison/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'landing/img/favicon.ico' %}" rel="icon">
+    <link href="{% static 'landing/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700" rel="stylesheet">
@@ -37,7 +37,7 @@
     <link href="{% static 'lib/dataTables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 
     <!-- Main Stylesheet File -->
-    <link href="{% static 'comparison/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'landing/css/style.css' %}" rel="stylesheet">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155338230-1"></script>
@@ -155,7 +155,7 @@
                 </div>
 
                 <div class="col-md-6 intro-img order-md-last order-first">
-                    <img src="{% static 'comparison/img/medicine.svg' %}" alt="" class="img-fluid">
+                    <img src="{% static 'landing/img/medicine.svg' %}" alt="" class="img-fluid">
                 </div>
             </div>
 
@@ -297,35 +297,7 @@
     <!-- <script src="contactform/contactform.js"></script> -->
 
     <!-- Template Main Javascript File -->
-    <script src="{% static 'comparison/js/main.js' %}"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#comparison_table').DataTable({
-                "paging": false,
-                // "ordering": false,
-                "info": false,
-                "searching": false,
-                "order": [
-                    [2, "asc"],
-                    [1, "desc"]
-                ],
-                // "order": [
-                //     [1, "desc"],
-                //     [2, "asc"]
-                // ],
-                "columns": [{
-                    "orderable": false
-                }, {
-                    "orderable": false
-                }, {
-                    "orderable": true
-                }, {
-                    "orderable": false
-                }]
-            });
-        });
-    </script>
+    <script src="{% static 'landing/js/main.js' %}"></script>
 
 </body>
 

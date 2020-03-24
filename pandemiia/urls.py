@@ -19,10 +19,10 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 
-from comparison.views import index as comparison_index
+from landing.views import index as landing_index
 
 urlpatterns = [
-    path('comparison/', include('comparison.urls')),
+    path('landing/', include('landing.urls')),
     path('admin/', admin.site.urls),
-    url(r'^$', include ('comparison.urls')),
+    url(r'^$', include ('landing.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
