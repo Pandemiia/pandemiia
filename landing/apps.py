@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ComparisonConfig(AppConfig):
+class LandingConfig(AppConfig):
     name = 'landing'
