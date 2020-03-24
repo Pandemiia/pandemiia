@@ -8,11 +8,3 @@ def index(request):
     template = loader.get_template('landing/index.html')
     context = { }
     return HttpResponse(template.render(context, request))
-
-# views.py
-# def payment_systems_list(request):
-#     table = PaymentSystemTable(PaymentSystem.objects.all())
-
-#     return loader.render(request, "person_list.html", {
-#         "table": table
-#     })
