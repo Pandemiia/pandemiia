@@ -6,7 +6,7 @@ verify_ssl = true
 
 [packages]
 
-django = "*"
+django = ">=3.0.3"
 gunicorn = "*"
 django-heroku = "*"
 django-tables2 = "*"
