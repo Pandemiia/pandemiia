@@ -1,1 +1,1 @@
-web: gunicorn perekazy.wsgi
+web: gunicorn pandemiia.wsgi
