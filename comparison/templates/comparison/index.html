@@ -1,0 +1,332 @@
+{% load static %}
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Платформа підтримки лікарень у часи пандемії</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Facebook Open Graph config -->
+    <!-- <meta property="og:title" content="Платформа підтримки лікарень у часи пандемії" />
+    <meta property="og:description" content="Допомагайте лікарям постачаючи засоби захисту, медикаменти, обладнання" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://pandemiia.herokuapp.com/" />
+    <meta property="og:image" content="https://pandemiia.herokuapp.com/static/comparison/img/homepage.png" />
+    <meta property="og:locale" content="ua_UA" />
+    <meta property="fb:app_id" content="743295962826192" /> -->
+
+    <!-- Favicons -->
+    <link href="{% static 'comparison/img/favicon.ico' %}" rel="icon">
+    <link href="{% static 'comparison/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700" rel="stylesheet">
+
+    <!-- Bootstrap CSS File -->
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dataTables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="{% static 'comparison/css/style.css' %}" rel="stylesheet">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155338230-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-155338230-1');
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-5BVG73N');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+
+    <!-- =======================================================
+    Theme Name: Rapid
+    Theme URL: https://bootstrapmade.com/rapid-multipurpose-bootstrap-business-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5BVG73N"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+    <!--==========================
+  Header
+  ============================-->
+    <header id="header">
+
+        <div id="topbar">
+            <div class="container">
+                <!-- <div class="social-links">
+                    <a href="https://fb.me/pereslavapp" class="facebook"><i class="fa fa-facebook"></i></a>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="logo float-left">
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <h1 class="text-light"><a href="#intro" class="scrollto"><span>COVID-19 потреби</span></a></h1>
+                <!-- <a href="#header" class="scrollto"><img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"></a> -->
+            </div>
+
+            <nav class="main-nav float-right d-none d-lg-block">
+                <ul>
+                    <li class="active"><a href="#intro">Головна</a></li>
+                    <!-- <li><a href="#about">Аналітика</a></li> -->
+                    <!-- <li class="drop-down"><a href="">Drop Down</a>
+                        <ul>
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li class="drop-down"><a href="#">Drop Down 2</a>
+                                <ul>
+                                    <li><a href="#">Deep Drop Down 1</a></li>
+                                    <li><a href="#">Deep Drop Down 2</a></li>
+                                    <li><a href="#">Deep Drop Down 3</a></li>
+                                    <li><a href="#">Deep Drop Down 4</a></li>
+                                    <li><a href="#">Deep Drop Down 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#">Drop Down 4</a></li>
+                            <li><a href="#">Drop Down 5</a></li>
+                        </ul>
+                    </li> -->
+                    <li><a href="#footer">Контакти</a></li>
+                </ul>
+            </nav>
+            <!-- .main-nav -->
+
+        </div>
+    </header>
+    <!-- #header -->
+
+    <!--==========================
+    Intro Section
+  ============================-->
+    <section id="intro" class="clearfix">
+        <div class="container d-flex h-100">
+            <div class="row justify-content-center align-self-center">
+                <div class="col-md-6 intro-info order-md-first order-last">
+                    <h2>Портал допомоги медикам у протидії <br><span>коронавірусу</span></h2>
+                    <p>Лікарні публікують найактуальніші потреби (маски, захисні маски, щитки, апарати ШВЛ), а волонтери збирають кошти або постачають засоби</p>
+                    <div>
+                        <a href="https://forms.gle/zXCuyykZLRRCwqTS6" class="btn-get-started scrollto">Я - лікар, допоможіть</a>
+                    </div>
+                    <p> </p>
+                    <a href="#about" class="btn-get-started scrollto">Я - постачальник/волонтер</a>
+                </div>
+
+                <div class="col-md-6 intro-img order-md-last order-first">
+                    <img src="{% static 'comparison/img/medicine.svg' %}" alt="" class="img-fluid">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!--==========================
+          Frequently Asked Questions Section
+        ============================-->
+    <!-- <section id="faq">
+            <div class="container">
+                <header class="section-header">
+                    <h3>Поширені запитання</h3>
+                </header>
+
+                <ul id="faq-list" class="wow fadeInUp">
+                    <li>
+                        <a data-toggle="collapse" class="faq-title collapsed" href="#faq1">Як це працює?<i class="ion-android-remove"></i></a>
+                        <div id="faq1" class="collapse" data-parent="#faq-list">
+                            <p>
+                                Деякі компанії пропонують "безкоштовні" перекази і ховають драконівську комісію у невигідний курс валют. Ми за прозорі і дешеві перекази в Україну. Тому і створили Переслав, незалежну платформу для порівняння систем переказу грошей. Без підводних каменів
+                                і прихованих комісій.
+                            </p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a data-toggle="collapse" href="#faq2" class="faq-title collapsed">Як безкоштовно зняти готівку (євро, долари) з валютної карти ПриватБанку?<i class="ion-android-remove"></i></a>
+                        <div id="faq2" class="collapse" data-parent="#faq-list">
+                            <p>
+                                Вам потрібно оформити єврову(!) карту для виплат у відділенні ПриватБанку. Випуск карти безкоштовний. Переказавши гроші на карту, ви можете зняти їх у євро, доларах у касі ПриватБанку.</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a data-toggle="collapse" href="#faq3" class="faq-title collapsed">Яку компанію обрати, щоб отримати в Україні готівку?<i class="ion-android-remove"></i></a>
+                        <div id="faq3" class="collapse" data-parent="#faq-list">
+                            <p>
+                                Переказати на євро карту ПриватБанку, Монобанку і зняти у касі, або отримати готівку через WesternUnion i MoneyGram у партнерській мережі по Україні
+                            </p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a data-toggle="collapse" href="#faq4" class="collapsed">Комісії компаній оновлюються часто? <i class="ion-android-remove"></i></a>
+                        <div id="faq4" class="collapse" data-parent="#faq-list">
+                            <p>
+                                На сайті завжди відображені актуальні комісії, які ми моніторимо та оновлюємо щотижня.
+                            </p>
+                        </div>
+                    </li>
+
+                </ul>
+
+            </div>
+        </section> -->
+    <!-- #faq -->
+    </main>
+
+    <!--==========================
+    Footer
+  ============================-->
+    <footer id="footer" class="section-bg">
+        <!-- <div class="footer-top">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+
+                        <div class="footer-links">
+                            <h4>Контакти</h4>
+                            <p>Пишіть на електронну пошту або фейсбук </p>
+                            <p>
+                                <strong>Email:</strong> yurii.andrusiak+pz@gmail.com<br>
+                            </p>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="https://fb.me/pereslavapp" class="facebook"><i class="fa fa-facebook"></i></a>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="footer-newsletter">
+                            <h4>Слідкуйте за оновленнями</h4>
+                            <p>Не пропустіть найгарячіші новини та унікальні поради по міжнародних переказах</p>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="email" name="email"><input type="submit" value="Підписатися">
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div> -->
+
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong>Rapid</strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!--
+          All the links in the footer should remain intact.
+          You can delete the links only if you purchased the pro version.
+          Licensing information: https://bootstrapmade.com/license/
+          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Rapid
+        -->
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+    </footer>
+    <!-- #footer -->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <!-- Uncomment below i you want to use a preloader -->
+    <!-- <div id="preloader"></div> -->
+
+    <!-- JavaScript Libraries -->
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/mobile-nav/mobile-nav.js' %}"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/isotope/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+    <script src="{% static 'lib/dataTables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/dataTables/jquery.dataTables.min.js' %}"></script>
+
+
+    <!-- Contact Form JavaScript File -->
+    <!-- <script src="contactform/contactform.js"></script> -->
+
+    <!-- Template Main Javascript File -->
+    <script src="{% static 'comparison/js/main.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#comparison_table').DataTable({
+                "paging": false,
+                // "ordering": false,
+                "info": false,
+                "searching": false,
+                "order": [
+                    [2, "asc"],
+                    [1, "desc"]
+                ],
+                // "order": [
+                //     [1, "desc"],
+                //     [2, "asc"]
+                // ],
+                "columns": [{
+                    "orderable": false
+                }, {
+                    "orderable": false
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": false
+                }]
+            });
+        });
+    </script>
+
+</body>
+
+</html>
