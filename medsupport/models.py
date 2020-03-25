@@ -6,8 +6,13 @@ from .choises import STATUS, UNITS, REGION
 
 
 class HospitalModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField("Назва медзакладу", max_length=400)
     region = models.IntegerField("Область", choices=REGION, default=0)
+    contact_person = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
+    email = models.EmailField("Email", blank=True)
+    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
+
 
     class Meta:
         verbose_name = "Госпіталь"
@@ -17,26 +22,11 @@ class HospitalModel(models.Model):
         return self.name
 
 
-class ProvisionerModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    hospital = models.ForeignKey(HospitalModel, verbose_name="Лікарня", on_delete=models.CASCADE, blank=True, null=True)
-    full_name = models.CharField("ПІБ", max_length=200, blank=True)
-    email = models.EmailField("Email", blank=True)
-    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
-
-    class Meta:
-        verbose_name = "Провізор"
-        verbose_name_plural = "Провізори"
-
-    def __str__(self):
-        return f"{self.user.username} | {self.hospital}"
-
-
 # Autocreate and autoedit provisioner model with User
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        ProvisionerModel.objects.create(user=instance)
+        HospitalModel.objects.create(user=instance)
     instance.provisionermodel.save()
 
 
@@ -65,11 +55,9 @@ class ArticleModel(models.Model):
     attached_files = models.FileField("Прикріплені файли", upload_to='articles/attached_files',
                                       null=True, blank=True)
 
-    author = models.ForeignKey(ProvisionerModel, verbose_name="Автор", on_delete=models.CASCADE, blank=True, null=True)
-
     class Meta:
-        verbose_name = "Товар"
-        verbose_name_plural = "Товари"
+        verbose_name = "Потреба"
+        verbose_name_plural = "Потреби"
 
     def __str__(self):
         return self.name
