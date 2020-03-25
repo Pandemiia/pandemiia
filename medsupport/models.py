@@ -54,8 +54,8 @@ class CategoryModel(models.Model):
 class ArticleModel(models.Model):
     category = models.ForeignKey(CategoryModel, verbose_name="Категорія", on_delete=models.CASCADE)
     name = models.CharField("Назва товару", max_length=400)
-    units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
     count = models.IntegerField("Кількість")
+    units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
     status = models.IntegerField("Статус", choices=STATUS, default=0)
     hospital = models.ForeignKey(HospitalModel, verbose_name="Лікарня", on_delete=models.CASCADE)
     created_on = models.DateTimeField("Дата створення", auto_now_add=True)
@@ -64,6 +64,8 @@ class ArticleModel(models.Model):
                                        null=True, blank=True)
     attached_files = models.FileField("Прикріплені файли", upload_to='articles/attached_files',
                                       null=True, blank=True)
+
+    author = models.ForeignKey(ProvisionerModel, verbose_name="Автор", on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         verbose_name = "Товар"
