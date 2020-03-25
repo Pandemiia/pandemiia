@@ -44,6 +44,10 @@ class ArticleModel(models.Model):
     hospital = models.ForeignKey(HospitalModel, on_delete=models.CASCADE)
     created_on = models.DateTimeField("Дата створення", auto_now_add=True)
     last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True)
+    attached_image = models.ImageField("Прикріплене зображення", upload_to='articles/image_files',
+                                       null=True, blank=True)
+    attached_files = models.FileField("Прикріплені файли", upload_to='articles/attached_files',
+                                      null=True, blank=True)
 
     class Meta:
         verbose_name = "Товар"
