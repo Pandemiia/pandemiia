@@ -36,7 +36,6 @@ ALLOWED_HOSTS = ["0.0.0.0:5000", "https://pereslav.herokuapp.com", "*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # 'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

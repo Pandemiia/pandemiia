@@ -1,21 +1,8 @@
 from django.contrib import admin
 from .models import ArticleModel, CategoryModel, HospitalModel, User
+from .utils import remove_from_fieldsets
 
 admin.site.site_header = "Pandemiia"
-
-
-# Remove field from fieldsets
-def remove_from_fieldsets(fieldsets, fields):
-    for fieldset in fieldsets:
-        for field in fields:
-            if field in fieldset[1]['fields']:
-                new_fields = []
-                for new_field in fieldset[1]['fields']:
-                    if not new_field in fields:
-                        new_fields.append(new_field)
-
-                fieldset[1]['fields'] = tuple(new_fields)
-                break
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -63,7 +50,7 @@ class ArticleHospitalInline(admin.TabularInline):
 
 
 class HospitalAdmin(admin.ModelAdmin):
-    fields = ('user', ("name", "contact_person"), ("tel", "email"))
+    fields = ('user', 'region', ("name", "contact_person"), ("tel", "email"))
 
     inlines = (ArticleHospitalInline,)
 
@@ -92,7 +79,6 @@ class HospitalAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
-
 
 
 admin.site.register(ArticleModel, ArticleAdmin)

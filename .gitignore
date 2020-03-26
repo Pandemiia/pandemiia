@@ -89,6 +89,7 @@ db.sqlite3
 
 .idea/
 venv/
+admin/
 
 .vscode/
 .vscode/settings.json
