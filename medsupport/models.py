@@ -27,7 +27,7 @@ class HospitalModel(models.Model):
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         HospitalModel.objects.create(user=instance)
-    instance.provisionermodel.save()
+    instance.hospitalmodel.save()
 
 
 class CategoryModel(models.Model):
@@ -44,20 +44,33 @@ class CategoryModel(models.Model):
 class ArticleModel(models.Model):
     category = models.ForeignKey(CategoryModel, verbose_name="Категорія", on_delete=models.CASCADE)
     name = models.CharField("Назва товару", max_length=400)
-    count = models.IntegerField("Кількість")
-    units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
-    status = models.IntegerField("Статус", choices=STATUS, default=0)
-    hospital = models.ForeignKey(HospitalModel, verbose_name="Лікарня", on_delete=models.CASCADE)
-    created_on = models.DateTimeField("Дата створення", auto_now_add=True)
-    last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True)
+
     attached_image = models.ImageField("Прикріплене зображення", upload_to='articles/image_files',
                                        null=True, blank=True)
     attached_files = models.FileField("Прикріплені файли", upload_to='articles/attached_files',
                                       null=True, blank=True)
 
     class Meta:
+        verbose_name = "Товар"
+        verbose_name_plural = "Товари"
+
+    def __str__(self):
+        return self.name
+
+
+class HospitalNeedModel(models.Model):
+    article = models.ForeignKey(ArticleModel, on_delete=models.CASCADE)
+    count = models.IntegerField("Кількість")
+    units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
+    hospital = models.ForeignKey(HospitalModel, verbose_name="Лікарня", on_delete=models.CASCADE)
+    status = models.IntegerField("Статус", choices=STATUS, default=0)
+    created_on = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
+    last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
+
+    class Meta:
         verbose_name = "Потреба"
         verbose_name_plural = "Потреби"
 
     def __str__(self):
-        return self.name
+        return self.article.name
+
