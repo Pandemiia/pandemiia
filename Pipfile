@@ -9,6 +9,7 @@ django-heroku = "*"
 django-tables2 = "*"
 whitenoise = "*"
 pillow = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.7.3"
