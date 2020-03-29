@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'medsupport',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'pandemiia.wsgi.application'
+WSGI_APPLICATION = 'pandemiia.wsgi.application'
 
 
 # Database
@@ -140,8 +141,3 @@ COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter',  'co
 
 # Activate Django-Heroku.
 # django_heroku.settings(locals())
-
-try:
-    from local_settings import *
-except ImportError:
-    pass

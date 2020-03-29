@@ -19,7 +19,9 @@ class HospitalModel(models.Model):
         verbose_name_plural = "Госпіталі"
 
     def __str__(self):
-        return self.name
+        if self.name:
+            return self.name
+        return self.user.username
 
 
 # Autocreate and autoedit provisioner model with User
