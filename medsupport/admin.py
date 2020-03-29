@@ -42,7 +42,7 @@ class CategoryPointAdmin(admin.ModelAdmin):
 class PointAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name', 'description',)
+            'fields': ('user', ('name', 'description'))
         }),
         ('Категорія установи', {
             'classes': ('collapse',),
@@ -53,8 +53,14 @@ class PointAdmin(admin.ModelAdmin):
             'fields': (('region', 'city'), ('line1', 'zip_code'), ('geo_lat', 'geo_lng'))
         }),
     )
+    readonly_fields = ('user',)
     filter_horizontal = ('category',)
     inlines = (PointContactPersonInline, NeedInline)
 
+    def get_queryset(self, request):
+        qs = super(PointAdmin, self).get_queryset(request)
+        if not request.user.is_superuser:
+            return qs.filter(user=request.user)
+        return qs
 
 

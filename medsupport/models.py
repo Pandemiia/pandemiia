@@ -28,7 +28,7 @@ class CategoryArticleModel(models.Model):
 
 
 class PointModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name="Логін користувача", on_delete=models.CASCADE)
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
     category = models.ManyToManyField(CategoryPointModel)
