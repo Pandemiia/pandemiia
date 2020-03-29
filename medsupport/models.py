@@ -5,14 +5,41 @@ from django.dispatch import receiver
 from .choises import STATUS, UNITS, REGION
 
 
-class HospitalModel(models.Model):
+class CategoryPointModel(models.Model):
+    name = models.CharField("Категорія закладів", max_length=400)
+
+    class Meta:
+        verbose_name = "Категорія закладів"
+        verbose_name_plural = "Категорії закладів"
+
+    def __str__(self):
+        return self.name
+
+
+class CategoryArticleModel(models.Model):
+    name = models.CharField("Категорія товару", max_length=400)
+
+    class Meta:
+        verbose_name = "Категорія товарів"
+        verbose_name_plural = "Категорії товарів"
+
+    def __str__(self):
+        return self.name
+
+
+class PointModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField("Назва медзакладу", max_length=400)
-    region = models.IntegerField("Область", choices=REGION, default=0)
-    contact_person = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
-    email = models.EmailField("Email", blank=True)
-    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
+    description = models.CharField("Опис", max_length=1000, blank=True)
+    category = models.ManyToManyField(CategoryPointModel)
 
+    # Address data
+    region = models.IntegerField("Область", choices=REGION, default=0)
+    city = models.CharField('Місто', max_length=50)
+    zip_code = models.CharField('Поштовий індекс', max_length=50)
+    line1 = models.CharField('Повний адрес', max_length=50)
+    geo_lat = models.IntegerField("Геопозиція: широта", blank=True, null=True)
+    geo_lng = models.IntegerField("Геопозиція: довгота", blank=True, null=True)
 
     class Meta:
         verbose_name = "Госпіталь"
@@ -24,33 +51,38 @@ class HospitalModel(models.Model):
         return self.user.username
 
 
-# Autocreate and autoedit provisioner model with User
+class PointContactPersonModel(models.Model):
+    point = models.ForeignKey(PointModel, on_delete=models.CASCADE)
+    full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
+    position = models.CharField("Посада", max_length=200, blank=True)
+    email = models.EmailField("Email", blank=True)
+    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
+
+    class Meta:
+        verbose_name = "Контактна особа"
+        verbose_name_plural = "Контактні особи"
+
+    def __str__(self):
+        return self.full_name
+
+
+class PhoneContactPersonModel(models.Model):
+    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
+    contact_person = models.ForeignKey(PointContactPersonModel, on_delete=models.CASCADE)
+
+
+# Auto create and auto edit object of PointModel with User
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        HospitalModel.objects.create(user=instance)
-    instance.hospitalmodel.save()
-
-
-class CategoryModel(models.Model):
-    name = models.CharField("Категорія товару", max_length=400)
-
-    class Meta:
-        verbose_name = "Категорія товарів"
-        verbose_name_plural = "Категорії товарів"
-
-    def __str__(self):
-        return self.name
+        PointModel.objects.create(user=instance)
+    instance.pointmodel.save()
 
 
 class ArticleModel(models.Model):
-    category = models.ForeignKey(CategoryModel, verbose_name="Категорія", on_delete=models.CASCADE)
-    name = models.CharField("Назва товару", max_length=400)
-
-    attached_image = models.ImageField("Прикріплене зображення", upload_to='articles/image_files',
-                                       null=True, blank=True)
-    attached_files = models.FileField("Прикріплені файли", upload_to='articles/attached_files',
-                                      null=True, blank=True)
+    category = models.ManyToManyField(CategoryArticleModel, verbose_name="Категорії")
+    name = models.CharField("Назва товару", max_length=200)
+    description = models.CharField("Опис", max_length=1000)
 
     class Meta:
         verbose_name = "Товар"
@@ -60,11 +92,12 @@ class ArticleModel(models.Model):
         return self.name
 
 
-class HospitalNeedModel(models.Model):
+class NeedModel(models.Model):
     article = models.ForeignKey(ArticleModel, on_delete=models.CASCADE)
-    count = models.IntegerField("Кількість")
+    point = models.ForeignKey(PointModel, verbose_name="Лікарня", on_delete=models.CASCADE)
+    quantity_needed = models.IntegerField("Скільки ще потрібно", default=0)
+    quantity_done = models.IntegerField("Скільки вже отримано", default=0)
     units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
-    hospital = models.ForeignKey(HospitalModel, verbose_name="Лікарня", on_delete=models.CASCADE)
     status = models.IntegerField("Статус", choices=STATUS, default=0)
     created_on = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
     last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
