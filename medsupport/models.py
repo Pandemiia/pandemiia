@@ -51,8 +51,8 @@ class PointModel(models.Model):
         return self.user.username
 
 
-class PointContactPersonModel(models.Model):
-    point = models.ForeignKey(PointModel, on_delete=models.CASCADE)
+class ContactModel(models.Model):
+    point = models.ForeignKey(PointModel, related_name='contacts', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
     email = models.EmailField("Email", blank=True)
@@ -68,7 +68,7 @@ class PointContactPersonModel(models.Model):
 
 class PhoneContactPersonModel(models.Model):
     tel = models.CharField("Контактний телефон", max_length=13, blank=True)
-    contact_person = models.ForeignKey(PointContactPersonModel, on_delete=models.CASCADE)
+    contact_person = models.ForeignKey(ContactModel, on_delete=models.CASCADE)
 
 
 # Auto create and auto edit object of PointModel with User

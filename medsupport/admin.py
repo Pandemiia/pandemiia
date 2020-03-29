@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PointModel,  PointContactPersonModel, \
+from .models import PointModel,  ContactModel, \
     CategoryPointModel, CategoryArticleModel, NeedModel, ArticleModel
 
 
@@ -11,7 +11,7 @@ class NeedInline(admin.TabularInline):
 
 
 class PointContactPersonInline(admin.TabularInline):
-    model = PointContactPersonModel
+    model = ContactModel
     classes = ('collapse',)
     fields = ('point', 'full_name', 'position', 'tel', 'email')
     extra = 0
