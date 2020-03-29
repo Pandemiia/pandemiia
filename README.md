@@ -3,6 +3,8 @@ Pandemiia is an open source supply chain platform where hospitals fighting coron
 
 https://pandemiia.herokuapp.com
 
+Our public roadmap -  https://www.notion.so/03ff6e7ece2d45e38eae9abb7f19e640?v=16c0b45807b84291970b7621bd566b87
+
 # Tech stack
 Pipenv, Django, Bootstrap, Heroku
 
