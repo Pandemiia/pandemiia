@@ -93,3 +93,4 @@ admin/
 
 .vscode/
 .vscode/settings.json
+rest_framework/
