@@ -4,7 +4,7 @@ ALLOWED_HOSTS = ['*']
 
 DEBUG = True
 
-SECRET_KEY = "NOT_PRODUCTION_KEY"
+SECRET_KEY = "6%ls*13kzfwr##^&o52o=qkjb+qq^womb-skd)qa!5w-u)x4mh"
 
 DATABASES = {
     'default': {
