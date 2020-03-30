@@ -13,7 +13,7 @@ class NeedInline(admin.TabularInline):
 class PointContactPersonInline(admin.TabularInline):
     model = ContactModel
     classes = ('collapse',)
-    fields = ('point', 'full_name', 'position', 'tel', 'email')
+    fields = ('point', 'full_name', 'position', 'phone', 'email')
     extra = 0
 
 

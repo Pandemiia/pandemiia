@@ -11,7 +11,7 @@ class CategoryPointSerializer(ModelSerializer):
 class ContactSerializer(ModelSerializer):
     class Meta:
         model = ContactModel
-        fields = ('full_name', 'position', 'tel', 'email')
+        fields = ('full_name', 'position', 'phone', 'email')
 
 
 class PointSerializer(ModelSerializer):
