@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import RegexValidator
 from .choises import STATUS, UNITS, REGION
 
 
@@ -36,14 +37,15 @@ class PointModel(models.Model):
     # Address data
     region = models.IntegerField("Область", choices=REGION, default=0)
     city = models.CharField('Місто', max_length=50)
-    zip_code = models.CharField('Поштовий індекс', max_length=50)
+    zip_code_validator = RegexValidator(regex="^\\d{5}$", message="Поштовий індекс має бути в форматі 01234")
+    zip_code = models.CharField('Поштовий індекс', max_length=50, validators=[zip_code_validator], blank=True)
     line1 = models.CharField('Повний адрес', max_length=50)
     geo_lat = models.IntegerField("Геопозиція: широта", blank=True, null=True)
     geo_lng = models.IntegerField("Геопозиція: довгота", blank=True, null=True)
 
     class Meta:
-        verbose_name = "Госпіталь"
-        verbose_name_plural = "Госпіталі"
+        verbose_name = "Медичний заклад"
+        verbose_name_plural = "Медичні заклади"
 
     def __str__(self):
         if self.name:
@@ -55,8 +57,11 @@ class ContactModel(models.Model):
     point = models.ForeignKey(PointModel, related_name='contacts', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
-    email = models.EmailField("Email", blank=True)
-    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
+    email = models.EmailField("Email", unique=True, blank=True)
+
+    phone_validator = RegexValidator(regex=r'^\+?3?8?(0\d{9})$',
+                                   message="Телефонний номер має бути в форматі +380123456789")
+    phone = models.CharField("Контактний телефон", max_length=13, validators=[phone_validator], unique=True, blank=True)
 
     class Meta:
         verbose_name = "Контактна особа"
@@ -95,8 +100,8 @@ class ArticleModel(models.Model):
 class NeedModel(models.Model):
     article = models.ForeignKey(ArticleModel, on_delete=models.CASCADE)
     point = models.ForeignKey(PointModel, verbose_name="Лікарня", on_delete=models.CASCADE)
-    quantity_needed = models.IntegerField("Скільки ще потрібно", default=0)
-    quantity_done = models.IntegerField("Скільки вже отримано", default=0)
+    quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
+    quantity_done = models.PositiveIntegerField("Скільки вже отримано", default=0)
     units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
     status = models.IntegerField("Статус", choices=STATUS, default=0)
     created_on = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
