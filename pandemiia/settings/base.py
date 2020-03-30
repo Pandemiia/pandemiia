@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-# import django_heroku
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -74,11 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pandemiia.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -101,7 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'uk-ua'
+LANGUAGE_CODE = 'uk'
 
 TIME_ZONE = 'EET'
 
@@ -118,6 +112,3 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 # Extra places for collectstatic to find static files.
-
-# Activate Django-Heroku.
-# django_heroku.settings(locals())

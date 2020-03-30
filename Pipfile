@@ -3,12 +3,20 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [packages]
-django = "*"
-gunicorn = "*"
+gunicorn = "~=20.0.4"
 django-heroku = "*"
 django-tables2 = "*"
-whitenoise = "*"
-pillow = "*"
+whitenoise = "~=5.0.1"
+dj-database-url = "*"
+asgiref = "~=3.2.7"
+django-cors-headers = "~=3.2.1"
+djangorestframework = "*"
+pytz = "~=2019.3"
+sqlparse = "~=0.3.1"
+Django = "~=3.0.4"
+Pillow = "~=7.0.0"
+pyyaml = "*"
+uritemplate = "*"
 
 [requires]
 python_version = "3.7.3"
