@@ -1,5 +1,6 @@
-from rest_framework.serializers import ModelSerializer, StringRelatedField, PrimaryKeyRelatedField
-from .models import NeedModel, PointModel, CategoryPointModel, ContactModel
+from rest_framework.serializers import ModelSerializer, StringRelatedField, \
+    PrimaryKeyRelatedField, SerializerMethodField
+from .models import NeedModel, PointModel, CategoryPointModel, ContactModel, ArticleModel
 
 
 class CategoryPointSerializer(ModelSerializer):
@@ -14,7 +15,7 @@ class ContactSerializer(ModelSerializer):
         fields = ('full_name', 'position', 'phone', 'email')
 
 
-class PointSerializer(ModelSerializer):
+class PointsSerializer(ModelSerializer):
     category = StringRelatedField(read_only=True, many=True)
     contacts = ContactSerializer(read_only=True, many=True)
 
@@ -26,7 +27,7 @@ class PointSerializer(ModelSerializer):
         return obj.get_region_display()
 
     def to_representation(self, instance):
-        data = super(PointSerializer, self).to_representation(instance)
+        data = super(PointsSerializer, self).to_representation(instance)
 
         data['address'] = {
                 'region': self.get_region(instance),
@@ -40,6 +41,80 @@ class PointSerializer(ModelSerializer):
             },
         return data
 
+
+class PointsShortSerializer(ModelSerializer):
+    category = StringRelatedField(read_only=True, many=True)
+
+    class Meta:
+        model = PointModel
+        fields = ('id', 'name', 'region', 'category')
+
+    def get_region(self, obj):
+        return obj.get_region_display()
+
+
+class PointDetailedSerializer(ModelSerializer):
+    category = StringRelatedField(read_only=True, many=True)
+    contacts = ContactSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = PointModel
+        fields = ('id', 'name', 'description', 'category', 'contacts')
+
+    def get_region(self, obj):
+        return obj.get_region_display()
+
+    def to_representation(self, instance):
+        data = super(PointDetailedSerializer, self).to_representation(instance)
+
+        data['address'] = {
+                              'region': self.get_region(instance),
+                              'city': instance.city,
+                              'zipCode': instance.zip_code,
+                              'line1': instance.line1,
+                              'geoPosition': {
+                                  'lat': instance.geo_lat,
+                                  'lng': instance.geo_lng
+                              }
+                          },
+        return data
+
+
+class ArticleSerializer(ModelSerializer):
+    category = StringRelatedField(read_only=True, many=True)
+
+    class Meta:
+        model = ArticleModel
+        fields = ('name', 'description', 'category')
+
+
+class NeedsSerializer(ModelSerializer):
+    article = ArticleSerializer()
+    status = SerializerMethodField()
+
+    class Meta:
+        model = NeedModel
+        fields = ('id', 'point', 'status', 'article')
+
+    def get_status(self, obj):
+        return obj.get_status_display()
+
+    def to_representation(self, instance):
+        data = super(NeedsSerializer, self).to_representation(instance)
+
+        data['name'] = instance.article.name
+        data['description'] = instance.article.description
+
+        data['quantity'] = {
+           'needed': instance.quantity_needed,
+           'done': instance.quantity_done,
+        },
+        data['units'] = instance.units
+
+        data['category'] = data.get('article').get('category')
+        data.pop('article')
+
+        return data
 
 
 
