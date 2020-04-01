@@ -7,11 +7,11 @@ DEBUG = True
 SECRET_KEY = "6%ls*13kzfwr##^&o52o=qkjb+qq^womb-skd)qa!5w-u)x4mh"
 
 
-# INSTALLED_APPS += 'corsheaders'
+INSTALLED_APPS += 'corsheaders'
 
-# MIDDLEWARE += 'corsheaders.middleware.CorsMiddleware'
+MIDDLEWARE += 'corsheaders.middleware.CorsMiddleware'
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 DATABASES = {
