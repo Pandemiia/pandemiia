@@ -7,10 +7,6 @@ DEBUG = True
 SECRET_KEY = "6%ls*13kzfwr##^&o52o=qkjb+qq^womb-skd)qa!5w-u)x4mh"
 
 
-INSTALLED_APPS += 'corsheaders'
-
-MIDDLEWARE += 'corsheaders.middleware.CorsMiddleware'
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 

@@ -1,11 +1,17 @@
 from rest_framework.serializers import ModelSerializer, StringRelatedField, \
     PrimaryKeyRelatedField, SerializerMethodField
-from .models import NeedModel, PointModel, CategoryPointModel, ContactModel, ArticleModel
+from .models import NeedModel, PointModel, CategoryPointModel, ContactModel, ArticleModel, CategoryArticleModel
 
 
 class CategoryPointSerializer(ModelSerializer):
     class Meta:
         model = CategoryPointModel
+        fields = ('name',)
+
+
+class CategoryArticleSerializer(ModelSerializer):
+    class Meta:
+        model = CategoryArticleModel
         fields = ('name',)
 
 
@@ -64,20 +70,20 @@ class PointDetailedSerializer(ModelSerializer):
     def get_region(self, obj):
         return obj.get_region_display()
 
-    def to_representation(self, instance):
-        data = super(PointDetailedSerializer, self).to_representation(instance)
+def to_representation(self, instance):
+    data = super(PointDetailedSerializer, self).to_representation(instance)
 
-        data['address'] = {
-                              'region': self.get_region(instance),
-                              'city': instance.city,
-                              'zipCode': instance.zip_code,
-                              'line1': instance.line1,
-                              'geoPosition': {
-                                  'lat': instance.geo_lat,
-                                  'lng': instance.geo_lng
-                              }
-                          },
-        return data
+    data['address'] = {
+          'region': self.get_region(instance),
+          'city': instance.city,
+          'zipCode': instance.zip_code,
+          'line1': instance.line1,
+          'geoPosition': {
+              'lat': instance.geo_lat,
+              'lng': instance.geo_lng
+          }
+      },
+    return data
 
 
 class ArticleSerializer(ModelSerializer):
@@ -91,13 +97,17 @@ class ArticleSerializer(ModelSerializer):
 class NeedsSerializer(ModelSerializer):
     article = ArticleSerializer()
     status = SerializerMethodField()
+    units = SerializerMethodField()
 
     class Meta:
         model = NeedModel
-        fields = ('id', 'point', 'status', 'article')
+        fields = ('id', 'point', 'status', 'article', 'units')
 
     def get_status(self, obj):
         return obj.get_status_display()
+
+    def get_units(self, obj):
+        return obj.get_units_display()
 
     def to_representation(self, instance):
         data = super(NeedsSerializer, self).to_representation(instance)
@@ -109,7 +119,9 @@ class NeedsSerializer(ModelSerializer):
            'needed': instance.quantity_needed,
            'done': instance.quantity_done,
         },
-        data['units'] = instance.units
+        units = data.get('units')
+        data.pop('units')
+        data['units'] = units
 
         data['category'] = data.get('article').get('category')
         data.pop('article')
