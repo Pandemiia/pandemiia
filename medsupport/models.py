@@ -39,11 +39,10 @@ class PointModel(models.Model):
     city = models.CharField('Місто', max_length=50)
     zip_code_validator = RegexValidator(regex="^\\d{5}$", message="Поштовий індекс має бути в форматі 01234")
     zip_code = models.CharField('Поштовий індекс', max_length=50, validators=[zip_code_validator], blank=True)
-    line1 = models.CharField('Повний адрес', max_length=50)
+    line1 = models.CharField('Повний адрес', max_length=100)
     geo_lat = models.CharField("Геопозиція: широта (lat)", max_length=50, blank=True, null=True)
     geo_lng = models.CharField("Геопозиція: довгота (lng)", max_length=50, blank=True, null=True)
-#    geo_lat = models.IntegerField("Геопозиція: широта", blank=True, null=True)
-#    geo_lng = models.IntegerField("Геопозиція: довгота", blank=True, null=True)
+
     class Meta:
         verbose_name = "Медичний заклад"
         verbose_name_plural = "Медичні заклади"
