@@ -77,12 +77,15 @@ class PhoneContactPersonModel(models.Model):
     contact_person = models.ForeignKey(ContactModel, on_delete=models.CASCADE)
 
 
-# Auto create and auto edit object of PointModel with User
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        PointModel.objects.create(user=instance)
-    instance.pointmodel.save()
+# try:
+#     # Auto create and auto edit object of PointModel with User
+#     @receiver(post_save, sender=User)
+#     def create_or_update_user_profile(sender, instance, created, **kwargs):
+#         if created:
+#             PointModel.objects.create(user=instance)
+#         instance.pointmodel.save()
+# except:
+#     pass
 
 
 class ArticleModel(models.Model):
