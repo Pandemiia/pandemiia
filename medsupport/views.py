@@ -32,7 +32,7 @@ class CategoryArticleRestView(viewsets.ModelViewSet):
 
 class PointRestView(viewsets.ModelViewSet):
     """
-        Returns a single Point object
+        Point view set
     """
     queryset = PointModel.objects.all()
     serializer_class = PointDetailedSerializer
