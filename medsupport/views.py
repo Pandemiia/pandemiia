@@ -29,7 +29,6 @@ class CategoryArticleRestView(viewsets.ModelViewSet):
     serializer_class = CategoryArticleSerializer
 
 
-
 class PointRestView(viewsets.ModelViewSet):
     """
         Point view set
