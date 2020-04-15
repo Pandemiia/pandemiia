@@ -53,7 +53,7 @@ class PointAdmin(admin.ModelAdmin):
             'fields': (('region', 'city'), ('line1', 'zip_code'), ('geo_lat', 'geo_lng'))
         }),
     )
-    readonly_fields = ('user',)
+    # readonly_fields = ('user',)
     filter_horizontal = ('category',)
     inlines = (PointContactPersonInline, NeedInline)
 
@@ -63,4 +63,10 @@ class PointAdmin(admin.ModelAdmin):
             return qs.filter(user=request.user)
         return qs
 
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super(PointAdmin, self).get_readonly_fields(request, obj))
 
+        # add User field to read_only if user is not superuser
+        if not request.user.is_superuser:
+            fields.append('user')
+        return fields
