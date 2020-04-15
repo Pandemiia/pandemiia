@@ -17,6 +17,7 @@ Django = "~=3.0.4"
 Pillow = "~=7.0.0"
 pyyaml = "*"
 uritemplate = "*"
+django-environ = "~=0.4.5"
 
 [requires]
 python_version = "3.7.3"
