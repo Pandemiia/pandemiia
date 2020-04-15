@@ -106,6 +106,14 @@ STATIC_ROOT = env('DJANGO_STATIC_ROOT')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = env('DJANGO_MEDIA_ROOT')
 
+STATICFILES_DIRS = (
+    str(BASE_DIR.path('static')),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
