@@ -1,12 +1,12 @@
 # Pandemiia
 Pandemiia is an open source supply chain platform where hospitals fighting coronavirus on site may request extra supplies from volunteers, local businesses, charities or government organizations.
 
-https://pandemiia.herokuapp.com
+https://pandemiia.herokuapp.com https://pandemiia.in.ua/
 
 Our public roadmap -  https://www.notion.so/03ff6e7ece2d45e38eae9abb7f19e640?v=16c0b45807b84291970b7621bd566b87
 
 # Tech stack
-Pipenv, Django, Bootstrap, Heroku
+Pipenv, Django, Bootstrap, Amazon Web Services, GoogleMaps
 
 # How to run the Django project locally
 1. First, install pipenv to manage dependencies in virtual environment
