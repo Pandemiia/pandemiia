@@ -5,11 +5,7 @@ import sys
 
 
 def main():
-    # use local_settings if exist
-    if os.path.isfile(os.path.join(os.path.dirname(__file__), 'pandemiia/settings/local_settings.py')):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pandemiia.settings.local_settings")
-    else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pandemiia.settings.dev")
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pandemiia.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
