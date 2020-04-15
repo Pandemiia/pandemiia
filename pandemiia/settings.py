@@ -23,6 +23,7 @@ env = environ.Env(
     DJANGO_USE_DEBUG_TOOLBAR=(bool, False),
     DJANGO_TEST_RUN=(bool, False),
     DJANGO_HEALTH_CHECK_BODY=(str, 'Success'),
+    DJANGO_SITE_ID=(int, 1)
 )
 environ.Env.read_env()
 
@@ -45,6 +46,8 @@ DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
 
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
 
+SITE_ID = env('DJANGO_SITE_ID')
+
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
@@ -57,9 +60,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'medsupport',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook'
 ]
 
 MIDDLEWARE = [
@@ -132,6 +141,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 
 
 # Internationalization
