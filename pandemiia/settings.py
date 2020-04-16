@@ -54,6 +54,7 @@ SITE_ID = env('DJANGO_SITE_ID')
 
 # Application definition
 INSTALLED_APPS = [
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,14 +62,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'medsupport',
+
+    # third-party apps
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+
     'corsheaders',
+    'django_extensions',
+    'drf_yasg',
 
     'allauth',
     'allauth.account',
+    'rest_auth.registration',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook'
+    'allauth.socialaccount.providers.facebook',
+    
+    # local apps 
+    'medsupport',
+    # TODO: create app 'users' for auth/profiles/ets
 ]
 
 MIDDLEWARE = [
@@ -152,7 +164,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'uk'
@@ -166,10 +177,26 @@ USE_L10N = True
 USE_TZ = True
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_FILTER_BACKENDS': (
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    # ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    # TODO: uncomment when pagination could be added
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 100,
+}
+
+# DRF yasg redirection fix
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
 }
 
