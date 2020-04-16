@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     
     # local apps 
     'medsupport',
-    # TODO: create app 'users' for auth/profiles/ets
+    # TODO: create app 'users' for auth/profiles/etc
 ]
 
 MIDDLEWARE = [
