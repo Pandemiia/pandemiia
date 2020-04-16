@@ -23,6 +23,7 @@ env = environ.Env(
     DJANGO_USE_DEBUG_TOOLBAR=(bool, False),
     DJANGO_TEST_RUN=(bool, False),
     DJANGO_HEALTH_CHECK_BODY=(str, 'Success'),
+    DJANGO_SITE_ID=(int, 1)
 )
 environ.Env.read_env()
 
@@ -45,21 +46,41 @@ DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
 
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
 
+SITE_ID = env('DJANGO_SITE_ID')
+
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 
 # Application definition
 INSTALLED_APPS = [
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'medsupport',
+    'django.contrib.sites',
+
+    # third-party apps
     'rest_framework',
-    'corsheaders'
+    'rest_framework.authtoken',
+    'rest_auth',
+
+    'corsheaders',
+    'django_extensions',
+    'drf_yasg',
+
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    
+    # local apps 
+    'medsupport',
+    # TODO: create app 'users' for auth/profiles/etc
 ]
 
 MIDDLEWARE = [
@@ -134,6 +155,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGE_CODE = 'uk'
@@ -147,10 +177,26 @@ USE_L10N = True
 USE_TZ = True
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_FILTER_BACKENDS': (
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    # ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    # TODO: uncomment when pagination could be added
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 100,
+}
+
+# DRF yasg redirection fix
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
 }
 
