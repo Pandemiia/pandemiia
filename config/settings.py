@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-ROOT_URLCONF = 'pandemiia.urls'
+ROOT_URLCONF = 'config.urls'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pandemiia.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = env('DJANGO_STATIC_ROOT')
