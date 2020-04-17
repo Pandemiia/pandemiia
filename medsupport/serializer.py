@@ -27,7 +27,7 @@ class PointsSerializer(ModelSerializer):
 
     class Meta:
         model = PointModel
-        fields = ('id', 'name', 'description', 'category', 'contacts')
+        fields = ('id', 'name', 'description', 'category', 'contacts', 'company_code', 'email')
 
     def get_region(self, obj):
         return obj.get_region_display()
@@ -66,7 +66,7 @@ class PointDetailedSerializer(ModelSerializer):
 
     class Meta:
         model = PointModel
-        fields = ('id', 'name', 'description', 'category', 'contacts')
+        fields = ('id', 'name', 'description', 'category', 'contacts', 'company_code', 'email')
 
     def get_region(self, obj):
         return obj.get_region_display()
@@ -93,20 +93,17 @@ class ArticleSerializer(ModelSerializer):
 
     class Meta:
         model = ArticleModel
-        fields = ('name', 'description', 'category')
+        fields = ('name', 'description', 'category', 'main_image', 'attachment',
+                  'instruction', 'materials', 'tools', 'approved_by')
 
 
 class NeedsSerializer(ModelSerializer):
     article = ArticleSerializer()
-    status = SerializerMethodField()
     units = SerializerMethodField()
 
     class Meta:
         model = NeedModel
-        fields = ('id', 'point', 'status', 'article', 'units')
-
-    def get_status(self, obj):
-        return obj.get_status_display()
+        fields = ('id', 'point', 'article', 'units')
 
     def get_units(self, obj):
         return obj.get_units_display()
