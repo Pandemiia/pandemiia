@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.core.validators import RegexValidator
-from .choises import STATUS, UNITS, REGION
+from .choices import STATUS, UNITS, REGION
 
 
 class CategoryPointModel(models.Model):
@@ -29,7 +27,7 @@ class CategoryArticleModel(models.Model):
 
 
 class PointModel(models.Model):
-    user = models.OneToOneField(User, verbose_name="Логін користувача", on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, verbose_name="Логін користувача")
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
     category = models.ManyToManyField(CategoryPointModel)
@@ -40,6 +38,8 @@ class PointModel(models.Model):
     zip_code_validator = RegexValidator(regex="^\\d{5}$", message="Поштовий індекс має бути в форматі 01234")
     zip_code = models.CharField('Поштовий індекс', max_length=50, validators=[zip_code_validator], blank=True)
     line1 = models.CharField('Повний адрес', max_length=100)
+    company_code = models.IntegerField("Код ЄДРПОУ", null=True, blank=True)
+    email = models.EmailField("Електронна адреса установи", blank=True)
     geo_lat = models.CharField("Геопозиція: широта (lat)", max_length=50, blank=True, null=True)
     geo_lng = models.CharField("Геопозиція: довгота (lng)", max_length=50, blank=True, null=True)
 
@@ -76,21 +76,16 @@ class PhoneContactPersonModel(models.Model):
     contact_person = models.ForeignKey(ContactModel, on_delete=models.CASCADE)
 
 
-# try:
-#     # Auto create and auto edit object of PointModel with User
-#     @receiver(post_save, sender=User)
-#     def create_or_update_user_profile(sender, instance, created, **kwargs):
-#         if created:
-#             PointModel.objects.create(user=instance)
-#         instance.pointmodel.save()
-# except:
-#     pass
-
-
 class ArticleModel(models.Model):
     category = models.ManyToManyField(CategoryArticleModel, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     description = models.CharField("Опис", max_length=1000)
+    main_image = models.ImageField("Головне зображення", upload_to="article_images", blank=True)
+    attachment = models.FileField("Прикріплений файл", upload_to="article_attachment", blank=True)
+    instruction = models.TextField("Інструкція", max_length=1000, blank=True)
+    materials = models.CharField("Матеріали, з яких можна виготовляти", max_length=200, blank=True)
+    tools = models.CharField("Засоби для виготовлення", max_length=200, blank=True)
+    approved_by = models.CharField("Ким затверджено", max_length=200, blank=True)
 
     class Meta:
         verbose_name = "Товар"
@@ -106,7 +101,6 @@ class NeedModel(models.Model):
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_done = models.PositiveIntegerField("Скільки вже отримано", default=0)
     units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
-    status = models.IntegerField("Статус", choices=STATUS, default=0)
     created_on = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
     last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
 

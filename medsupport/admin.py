@@ -23,7 +23,7 @@ class CategoryArticleAdmin(admin.ModelAdmin):
 
 @admin.register(ArticleModel)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'category')
+    # fields = ('name', 'description', 'category')
     search_fields = ('name',)
     filter_horizontal = ('category',)
 
@@ -51,6 +51,10 @@ class PointAdmin(admin.ModelAdmin):
         ('Адрес', {
             'classes': ('collapse',),
             'fields': (('region', 'city'), ('line1', 'zip_code'), ('geo_lat', 'geo_lng'))
+        }),
+        ('Додатково', {
+            'classes': ('collapse',),
+            'fields': (('company_code'), ('email'))
         }),
     )
     # readonly_fields = ('user',)
