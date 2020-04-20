@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, StringRelatedField, \
-    PrimaryKeyRelatedField, SerializerMethodField, Serializer
+from rest_framework.serializers import (
+    ModelSerializer, StringRelatedField,
+    PrimaryKeyRelatedField, SerializerMethodField,
+    Serializer
+)
 from .models import (
     HospitalNeed, Hospital,
     HospitalCategory, Contact,
