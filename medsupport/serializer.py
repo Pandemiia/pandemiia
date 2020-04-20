@@ -101,7 +101,7 @@ class HospitalNeedSerializer(ModelSerializer):
 
     class Meta:
         model = HospitalNeed
-        fields = ('id', 'hospital', 'solution', 'units' 'quantity_needed', 'quantity_received')
+        fields = ('id', 'hospital', 'solution', 'units', 'quantity_needed', 'quantity_received')
 
     def get_units(self, obj):
         return obj.get_units_display()

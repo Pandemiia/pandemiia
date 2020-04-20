@@ -5,7 +5,7 @@ from medsupport import views
 router = SimpleRouter()
 router.register(r'hospitals', views.HospitalsViewSet)
 router.register(r'solutions', views.SolutionsViewSet)
-router.register(r'hospital-needs', views.HospitalNeedsViewSet)
+router.register(r'hospitals/needs', views.HospitalNeedsViewSet)
 
 urlpatterns = [
     path('', views.HomePageView.as_view(), name='index'),

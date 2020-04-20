@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+
+from users.models import User
 from .choices import REGION, NEED_UNITS
 
 
@@ -106,7 +107,12 @@ class HospitalNeed(models.Model):
     hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
-    units = models.CharField("Одиниці вимірювання", choices=NEED_UNITS, default=NEED_UNITS.piece)
+    units = models.CharField(
+        "Одиниці вимірювання",
+        choices=NEED_UNITS,
+        default=NEED_UNITS.pieces,
+        max_length=255,
+    )
     created = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
     edited = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
 

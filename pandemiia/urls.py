@@ -11,9 +11,8 @@ from drf_yasg import openapi
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('auth/', include('rest_auth.urls')),
-    path('auth/registration/', include('rest_auth.registration.urls')),
     path('', include('medsupport.urls')),
+    path('', include('users.urls')),
 ]
 
 # Swagger

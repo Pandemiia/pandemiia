@@ -1,9 +1,9 @@
 from model_utils import Choices
 
 NEED_UNITS = Choices(
-    ('piece', 'шт'),
-    ('pack', 'уп'),
-    ('vial', 'фл'),
+    ('pieces', 'шт'),
+    ('packs', 'уп'),
+    ('vials', 'фл'),
 )
 
 REGION = Choices(

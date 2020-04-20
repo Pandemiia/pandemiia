@@ -33,7 +33,7 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
             return HospitalShortSerializer
         return HospitalSerializer
 
-    @action(methods=['GET'], detail=False, url_path='short')
+    @action(methods=['GET'], detail=False, url_path='list-short')
     def list_short(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
