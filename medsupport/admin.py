@@ -3,7 +3,8 @@ from .models import  (
     Hospital,  Contact,
     HospitalCategory, SolutionCategory,
     Solution, HospitalNeed,
-    SolutionImage
+    SolutionImage, Tool,
+    Material
 )
 
 
@@ -32,23 +33,37 @@ class SolutionCategoryAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Tool)
+class ToolAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Solution)
 class SolutionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('name', 'description')
+            'fields': (('code', 'name'), 'need_description', 'definition')
         }),
         ("Категорія", {
             'classes': ('collapse',),
             'fields': ('categories',)
         }),
         (None, {
-            'fields': (('main_image', 'attachment'), 'instruction', ('materials', 'tools'), 'approved_by')
+            'fields': (('main_image', 'attachment'), 'instruction', 'approved_by')
+        }),
+        ("Матеріали та засоби", {
+            'classes': ('collapse',),
+            'fields': ('materials', 'tools')
         })
 
     )
     search_fields = ('name',)
-    filter_horizontal = ('categories',)
+    filter_horizontal = ('categories', 'materials', 'tools')
     inlines = (SolutionImageInline,)
 
 
