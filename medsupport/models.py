@@ -1,10 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from .choices import STATUS, UNITS, REGION
+
+from users.models import User
+from .choices import REGION, NEED_UNITS
 
 
-class CategoryPointModel(models.Model):
+class HospitalCategory(models.Model):
     name = models.CharField("Категорія закладів", max_length=400)
 
     class Meta:
@@ -15,22 +16,11 @@ class CategoryPointModel(models.Model):
         return self.name
 
 
-class CategoryArticleModel(models.Model):
-    name = models.CharField("Категорія товару", max_length=400)
-
-    class Meta:
-        verbose_name = "Категорія товарів"
-        verbose_name_plural = "Категорії товарів"
-
-    def __str__(self):
-        return self.name
-
-
-class PointModel(models.Model):
+class Hospital(models.Model):
     user = models.ManyToManyField(User, verbose_name="Логін користувача")
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
-    category = models.ManyToManyField(CategoryPointModel)
+    categories = models.ManyToManyField(HospitalCategory)
 
     # Address data
     region = models.IntegerField("Область", choices=REGION, default=0)
@@ -50,18 +40,24 @@ class PointModel(models.Model):
     def __str__(self):
         if self.name:
             return self.name
-        return self.user.username
+        return str(self.pk)
 
 
-class ContactModel(models.Model):
-    point = models.ForeignKey(PointModel, related_name='contacts', on_delete=models.CASCADE)
+class Contact(models.Model):
+    hospital = models.ForeignKey(Hospital, related_name='hospitals', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
     email = models.EmailField("Email", unique=True, blank=True)
-
-    phone_validator = RegexValidator(regex=r'^\+?3?8?(0\d{9})$',
-                                   message="Телефонний номер має бути в форматі +380123456789")
-    phone = models.CharField("Контактний телефон", max_length=13, validators=[phone_validator], unique=True, blank=True)
+    phone = models.CharField(
+        "Контактний телефон",
+        max_length=13,
+        validators=[RegexValidator(
+            regex=r'^\+?3?8?(0\d{9})$',
+            message="Телефонний номер має бути в форматі +380123456789"
+        )],
+        unique=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = "Контактна особа"
@@ -71,13 +67,24 @@ class ContactModel(models.Model):
         return self.full_name
 
 
-class PhoneContactPersonModel(models.Model):
+class PhoneContactPerson(models.Model):
     tel = models.CharField("Контактний телефон", max_length=13, blank=True)
-    contact_person = models.ForeignKey(ContactModel, on_delete=models.CASCADE)
+    contact_person = models.ForeignKey(Contact, on_delete=models.CASCADE)
 
 
-class ArticleModel(models.Model):
-    category = models.ManyToManyField(CategoryArticleModel, verbose_name="Категорії")
+class SolutionCategory(models.Model):
+    name = models.CharField("Категорія рішень", max_length=400)
+
+    class Meta:
+        verbose_name = "Категорія рішень"
+        verbose_name_plural = "Категорії рішень"
+
+    def __str__(self):
+        return self.name
+
+
+class Solution(models.Model):
+    categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     description = models.CharField("Опис", max_length=1000)
     main_image = models.ImageField("Головне зображення", upload_to="article_images", blank=True)
@@ -88,26 +95,31 @@ class ArticleModel(models.Model):
     approved_by = models.CharField("Ким затверджено", max_length=200, blank=True)
 
     class Meta:
-        verbose_name = "Товар"
-        verbose_name_plural = "Товари"
+        verbose_name = "Рішення"
+        verbose_name_plural = "Рішення"
 
     def __str__(self):
         return self.name
 
 
-class NeedModel(models.Model):
-    article = models.ForeignKey(ArticleModel, on_delete=models.CASCADE)
-    point = models.ForeignKey(PointModel, verbose_name="Лікарня", on_delete=models.CASCADE)
+class HospitalNeed(models.Model):
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
-    quantity_done = models.PositiveIntegerField("Скільки вже отримано", default=0)
-    units = models.IntegerField("Одиниці вимірювання", choices=UNITS, default=0)
-    created_on = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
-    last_edited_on = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
+    quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
+    units = models.CharField(
+        "Одиниці вимірювання",
+        choices=NEED_UNITS,
+        default=NEED_UNITS.pieces,
+        max_length=255,
+    )
+    created = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
+    edited = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
 
     class Meta:
         verbose_name = "Потреба"
         verbose_name_plural = "Потреби"
 
     def __str__(self):
-        return self.article.name
+        return self.solution.name
 

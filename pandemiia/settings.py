@@ -42,12 +42,11 @@ DATABASES = {
     'default': env.db('DJANGO_DATABASE_URL'),
 }
 
+# Email configs
+EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND')
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
-
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
-
 SITE_ID = env('DJANGO_SITE_ID')
-
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
@@ -67,11 +66,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-
     'corsheaders',
     'django_extensions',
     'drf_yasg',
-
     'allauth',
     'allauth.account',
     'rest_auth.registration',
@@ -80,7 +77,7 @@ INSTALLED_APPS = [
     
     # local apps 
     'medsupport',
-    # TODO: create app 'users' for auth/profiles/etc
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -136,32 +133,61 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-# Password validation
+# Password validation -- not needed yet
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
-
+# Django Auth
+# https://docs.djangoproject.com/en/2.2/ref/settings/#auth
+# ------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+AUTH_USER_MODEL = 'users.User'
+# LOGIN_URL = 'users:auth:login'
+LOGIN_REDIRECT_URL = '/'
+
+# django-allauth
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
+# ------------------------------------------------------------------------------
+ACCOUNT_ADAPTER = 'users.adapters.AccountAdapter'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USER_EMAIL_FIELD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+
+# django-rest-auth
+# https://django-rest-auth.readthedocs.io/en/latest/configuration.html
+# ------------------------------------------------------------------------------
+LOGOUT_ON_PASSWORD_CHANGE = False
+OLD_PASSWORD_FIELD_ENABLED = True
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'users.serializers.TokenSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer'
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.RegisterSerializer',
+}
 
 
 # Internationalization

@@ -1,18 +1,12 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
-
-from .views import (
-    HomePageView,
-    NeedsRestView,
-    CategoryArticleRestView,
-    PointViewSet
-)
+from medsupport import views
 
 router = SimpleRouter()
-router.register(r'points', PointViewSet)
+router.register(r'hospitals', views.HospitalsViewSet)
+router.register(r'solutions', views.SolutionsViewSet)
+router.register(r'hospitals/needs', views.HospitalNeedsViewSet)
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='index'),
-    path('category_article/', CategoryArticleRestView.as_view({'get': 'list'}), name='get-category-article'),
-    path('needs/', NeedsRestView.as_view({'get': 'list'}), name='get-needs'),
+    path('', views.HomePageView.as_view(), name='index'),
 ] + router.urls
