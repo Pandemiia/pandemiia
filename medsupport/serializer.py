@@ -1,12 +1,22 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, StringRelatedField, \
-    PrimaryKeyRelatedField, SerializerMethodField
-from .models import NeedModel, PointModel, CategoryPointModel, ContactModel, ArticleModel, CategoryArticleModel
+    PrimaryKeyRelatedField, SerializerMethodField, Serializer
+from .models import (
+    NeedModel, PointModel,
+    CategoryPointModel, ContactModel,
+    ArticleModel, CategoryArticleModel
+)
 
 
-class CategoryPointSerializer(ModelSerializer):
+class PointCategorySerializer(ModelSerializer):
+    related_points_number = SerializerMethodField()
+
     class Meta:
         model = CategoryPointModel
-        fields = ('name',)
+        fields = ('id', 'name', 'related_points_number')
+
+    def get_related_points_number(self, category_object) -> int:  # for proper swagger  model
+        return category_object.pointmodel_set.count()
 
 
 class CategoryArticleSerializer(ModelSerializer):
@@ -49,7 +59,7 @@ class PointsSerializer(ModelSerializer):
         return data
 
 
-class PointsShortSerializer(ModelSerializer):
+class PointShortSerializer(ModelSerializer):
     category = StringRelatedField(read_only=True, many=True)
 
     class Meta:
