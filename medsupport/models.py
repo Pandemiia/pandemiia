@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 from users.models import User
-from .choices import REGION, NEED_UNITS
+from .choices import REGION_CHOICES, NEED_UNITS
 
 
 class HospitalCategory(models.Model):
@@ -23,7 +23,7 @@ class Hospital(models.Model):
     categories = models.ManyToManyField(HospitalCategory)
 
     # Address data
-    region = models.IntegerField("Область", choices=REGION, default=0)
+    region = models.IntegerField("Область", choices=REGION_CHOICES)
     city = models.CharField('Місто', max_length=50)
     zip_code_validator = RegexValidator(regex="^\\d{5}$", message="Поштовий індекс має бути в форматі 01234")
     zip_code = models.CharField('Поштовий індекс', max_length=50, validators=[zip_code_validator], blank=True)
@@ -113,6 +113,7 @@ class Solution(models.Model):
     materials = models.ManyToManyField(Material, verbose_name="Матеріали, з яких можна виготовляти")
     tools = models.ManyToManyField(Tool, verbose_name="Засоби для виготовлення")
     approved_by = models.CharField("Ким затверджено", max_length=200, blank=True)
+    source = models.URLField("Джерело", blank=True)
 
     class Meta:
         verbose_name = "Рішення"
