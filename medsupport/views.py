@@ -61,14 +61,14 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
     def regions(self, request, *args, **kwargs):
         # Count all hospitals by region in one request to db
         # -> {region_key_1: amount_1, region_key_n: amount_n}
-        hospitals_in_region_counted = Hospital.objects.aggregate(
+        hospitals_counted_by_region = Hospital.objects.aggregate(
             **{str(region_key): Count('pk', filter=Q(region=region_key))
                for region_key, _ in REGION_CHOICES}
         )
         data = [
             {'key': key,
              'name': name,
-             'hospitals_in_region': hospitals_in_region_counted[str(key)]}
+             'hospitals_in_region': hospitals_counted_by_region[str(key)]}
             for key, name in REGION_CHOICES
         ]
         serializer = HospitalRegionsSerializer(data, many=True)
