@@ -109,14 +109,14 @@ class SolutionSerializer(ModelSerializer):
     categories = SolutionCategorySerializer(read_only=True, many=True)
     tools = SolutionToolsSerializer(read_only=True, many=True)
     materials = SolutionMaterialsSerializer(read_only=True, many=True)
-    solution_images = SolutionImagesSerializer(read_only=True, many=True)
+    images = SolutionImagesSerializer(read_only=True, many=True)
 
     class Meta:
         model = Solution
         fields = (
             'code', 'name', 'need_description', 'definition',
             'categories', 'main_image', 'attachment', 'instruction',
-            'materials', 'tools', 'approved_by', 'solution_images'
+            'materials', 'tools', 'approved_by', 'images'
         )
 
 

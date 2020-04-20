@@ -123,7 +123,12 @@ class Solution(models.Model):
 
 class SolutionImage(models.Model):
     image = models.ImageField("Фото рішення", upload_to="solution_images")
-    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
+    solution = models.ForeignKey(
+        Solution,
+        related_name='images',
+        verbose_name="Рішення",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         verbose_name = "Фото"
