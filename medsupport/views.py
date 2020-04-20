@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .serializer import (
+from .serializers import (
     HospitalSerializer, HospitalNeedSerializer,
     HospitalShortSerializer, HospitalDetailedSerializer,
     HospitalCategorySerializer, SolutionCategorySerializer,
