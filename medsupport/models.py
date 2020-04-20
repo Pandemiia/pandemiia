@@ -17,7 +17,7 @@ class HospitalCategory(models.Model):
 
 
 class Hospital(models.Model):
-    user = models.ManyToManyField(User, verbose_name="Логін користувача")
+    users = models.ManyToManyField(User, verbose_name="Логін користувача")
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
     categories = models.ManyToManyField(HospitalCategory)
@@ -67,11 +67,6 @@ class Contact(models.Model):
         return self.full_name
 
 
-class PhoneContactPerson(models.Model):
-    tel = models.CharField("Контактний телефон", max_length=13, blank=True)
-    contact_person = models.ForeignKey(Contact, on_delete=models.CASCADE)
-
-
 class SolutionCategory(models.Model):
     name = models.CharField("Категорія рішень", max_length=400)
 
@@ -86,9 +81,9 @@ class SolutionCategory(models.Model):
 class Solution(models.Model):
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
-    description = models.CharField("Опис", max_length=1000)
-    main_image = models.ImageField("Головне зображення", upload_to="article_images", blank=True)
-    attachment = models.FileField("Прикріплений файл", upload_to="article_attachment", blank=True)
+    description = models.TextField("Опис", max_length=1000)
+    main_image = models.ImageField("Головне зображення", upload_to="solution_images", blank=True)
+    attachment = models.FileField("Архів з файлами", upload_to="solution_attachment", blank=True)
     instruction = models.TextField("Інструкція", max_length=1000, blank=True)
     materials = models.CharField("Матеріали, з яких можна виготовляти", max_length=200, blank=True)
     tools = models.CharField("Засоби для виготовлення", max_length=200, blank=True)
@@ -102,8 +97,20 @@ class Solution(models.Model):
         return self.name
 
 
+class SolutionImage(models.Model):
+    image = models.ImageField("Фото рішення", upload_to="solution_images")
+    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Фото"
+        verbose_name_plural = "Фото"
+
+    def __str__(self):
+        return f"{self.solution.name} | id: {self.id}"
+
+
 class HospitalNeed(models.Model):
-    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
