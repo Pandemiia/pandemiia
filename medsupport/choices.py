@@ -1,16 +1,12 @@
-UNITS = (
-    (0, 'шт'),
-    (1, 'уп'),
-    (2, 'фл'),
+from model_utils import Choices
+
+NEED_UNITS = Choices(
+    ('piece', 'шт'),
+    ('pack', 'уп'),
+    ('vial', 'фл'),
 )
 
-STATUS = (
-    (0, 'Є потреба'),
-    (1, 'Отримано'),
-)
-
-
-REGION = (
+REGION = Choices(
     (0, "----"),
     (1, "Вінницька область"),
     (2, "Волинська область"),

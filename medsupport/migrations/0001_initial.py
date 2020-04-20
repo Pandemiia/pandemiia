@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('line1', models.CharField(max_length=50, verbose_name='Повний адрес')),
                 ('geo_lat', models.IntegerField(blank=True, null=True, verbose_name='Геопозиція: широта')),
                 ('geo_lng', models.IntegerField(blank=True, null=True, verbose_name='Геопозиція: довгота')),
-                ('category', models.ManyToManyField(to='medsupport.CategoryPointModel')),
+                ('category', models.ManyToManyField(to='medsupport.models.HospitalCategory')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Логін користувача')),
             ],
             options={
@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('tel', models.CharField(blank=True, max_length=13, verbose_name='Контактний телефон')),
-                ('contact_person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.ContactModel')),
+                ('contact_person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.models.Contact')),
             ],
         ),
         migrations.CreateModel(
@@ -101,8 +101,8 @@ class Migration(migrations.Migration):
                 ('status', models.IntegerField(choices=[(0, 'Є потреба'), (1, 'Отримано')], default=0, verbose_name='Статус')),
                 ('created_on', models.DateTimeField(auto_now_add=True, null=True, verbose_name='Дата створення')),
                 ('last_edited_on', models.DateTimeField(auto_now=True, null=True, verbose_name='Востаннє відредаговано')),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.ArticleModel')),
-                ('point', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.PointModel', verbose_name='Лікарня')),
+                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.models.Solution')),
+                ('point', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='medsupport.models.Point', verbose_name='Лікарня')),
             ],
             options={
                 'verbose_name': 'Потреба',
@@ -112,11 +112,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contactmodel',
             name='point',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contacts', to='medsupport.PointModel'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contacts', to='medsupport.models.Point'),
         ),
         migrations.AddField(
             model_name='articlemodel',
             name='category',
-            field=models.ManyToManyField(to='medsupport.CategoryArticleModel', verbose_name='Категорії'),
+            field=models.ManyToManyField(to='medsupport.models.SolutionCategory', verbose_name='Категорії'),
         ),
     ]

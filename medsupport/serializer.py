@@ -2,48 +2,56 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, StringRelatedField, \
     PrimaryKeyRelatedField, SerializerMethodField, Serializer
 from .models import (
-    NeedModel, PointModel,
-    CategoryPointModel, ContactModel,
-    ArticleModel, CategoryArticleModel
+    HospitalNeed, Hospital,
+    HospitalCategory, Contact,
+    Solution, SolutionCategory
 )
 
 
-class PointCategorySerializer(ModelSerializer):
+class ContactSerializer(ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('id', 'full_name', 'position', 'phone', 'email')
+
+
+class HospitalCategorySerializer(ModelSerializer):
     related_points_number = SerializerMethodField()
 
     class Meta:
-        model = CategoryPointModel
+        model = HospitalCategory
         fields = ('id', 'name', 'related_points_number')
 
     def get_related_points_number(self, category_object) -> int:  # for proper swagger  model
         return category_object.pointmodel_set.count()
 
 
-class CategoryArticleSerializer(ModelSerializer):
+class HospitalShortSerializer(ModelSerializer):
+    categories = HospitalCategorySerializer(read_only=True, many=True)
+
     class Meta:
-        model = CategoryArticleModel
-        fields = ('name',)
+        model = Hospital
+        fields = ('id', 'name', 'region', 'categories')
+
+    def get_region(self, obj):
+        return obj.get_region_display()
 
 
-class ContactSerializer(ModelSerializer):
-    class Meta:
-        model = ContactModel
-        fields = ('full_name', 'position', 'phone', 'email')
-
-
-class PointsSerializer(ModelSerializer):
-    category = StringRelatedField(read_only=True, many=True)
+class HospitalSerializer(HospitalShortSerializer):
     contacts = ContactSerializer(read_only=True, many=True)
 
     class Meta:
-        model = PointModel
-        fields = ('id', 'name', 'description', 'category', 'contacts', 'company_code', 'email')
+        model = Hospital
+        fields = (
+            'id', 'name', 'description',
+            'categories', 'contacts', 'company_code',
+            'email', 'region',
+        )
 
     def get_region(self, obj):
         return obj.get_region_display()
 
     def to_representation(self, instance):
-        data = super(PointsSerializer, self).to_representation(instance)
+        data = super().to_representation(instance)
 
         a = {'address': {
               'region': self.get_region(instance),
@@ -59,78 +67,50 @@ class PointsSerializer(ModelSerializer):
         return data
 
 
-class PointShortSerializer(ModelSerializer):
-    category = StringRelatedField(read_only=True, many=True)
+class HospitalDetailedSerializer(HospitalSerializer):
+    class Meta:
+        model = Hospital
+        fields = (
+            'id', 'name', 'description',
+            'categories', 'contacts', 'company_code',
+            'email', 'region',
+        )
+
+
+class SolutionCategorySerializer(ModelSerializer):
+    class Meta:
+        model = SolutionCategory
+        fields = ('id', 'name')
+
+
+class SolutionSerializer(ModelSerializer):
+    categories = SolutionCategorySerializer(read_only=True, many=True)
 
     class Meta:
-        model = PointModel
-        fields = ('id', 'name', 'region', 'category')
-
-    def get_region(self, obj):
-        return obj.get_region_display()
-
-
-class PointDetailedSerializer(ModelSerializer):
-    category = StringRelatedField(read_only=True, many=True)
-    contacts = ContactSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = PointModel
-        fields = ('id', 'name', 'description', 'category', 'contacts', 'company_code', 'email')
-
-    def get_region(self, obj):
-        return obj.get_region_display()
-
-    def to_representation(self, instance):
-        data = super(PointDetailedSerializer, self).to_representation(instance)
-
-        a = {'address': {
-              'region': self.get_region(instance),
-              'city': instance.city,
-              'zipCode': instance.zip_code,
-              'line1': instance.line1,
-              'geoPosition': {
-                  'lat': instance.geo_lat,
-                  'lng': instance.geo_lng
-              }
-          }}
-        data.update(a)
-        return data
+        model = Solution
+        fields = (
+            'name', 'description', 'categories',
+            'main_image', 'attachment', 'instruction',
+            'materials', 'tools', 'approved_by',
+        )
 
 
-class ArticleSerializer(ModelSerializer):
-    category = StringRelatedField(read_only=True, many=True)
-
-    class Meta:
-        model = ArticleModel
-        fields = ('name', 'description', 'category', 'main_image', 'attachment',
-                  'instruction', 'materials', 'tools', 'approved_by')
-
-
-class NeedsSerializer(ModelSerializer):
-    article = ArticleSerializer()
+class HospitalNeedSerializer(ModelSerializer):
+    solution = SolutionSerializer()
     units = SerializerMethodField()
 
     class Meta:
-        model = NeedModel
-        fields = ('id', 'point', 'article', 'units')
+        model = HospitalNeed
+        fields = ('id', 'hospital', 'solution', 'units' 'quantity_needed', 'quantity_received')
 
     def get_units(self, obj):
         return obj.get_units_display()
 
     def to_representation(self, instance):
-        data = super(NeedsSerializer, self).to_representation(instance)
-
-        data['name'] = instance.article.name
-        data['description'] = instance.article.description
-
+        data = super(HospitalNeedSerializer, self).to_representation(instance)
         q = {'quantity': {
            'needed': instance.quantity_needed,
-           'done': instance.quantity_done,
+           'done': instance.quantity_received,
         }}
         data.update(q)
-
-        data['category'] = data.get('article').get('category')
-        data.pop('article')
-
         return data
