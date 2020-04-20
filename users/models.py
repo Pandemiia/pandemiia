@@ -6,8 +6,8 @@ from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-# from model_utils import Choices
-# from model_utils.fields import StatusField
+from model_utils import Choices
+from model_utils.fields import StatusField
 from model_utils.models import TimeStampedModel
 from users.utils import generate_random_username
 

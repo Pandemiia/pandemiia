@@ -2,12 +2,13 @@ from rest_framework import serializers
 from rest_framework.serializers import (
     ModelSerializer, StringRelatedField,
     PrimaryKeyRelatedField, SerializerMethodField,
-    Serializer
+    Serializer, RelatedField
 )
 from .models import (
     HospitalNeed, Hospital,
     HospitalCategory, Contact,
-    Solution, SolutionCategory
+    Solution, SolutionCategory,
+    Tool, Material, SolutionImage
 )
 
 
@@ -86,15 +87,36 @@ class SolutionCategorySerializer(ModelSerializer):
         fields = ('id', 'name')
 
 
+class SolutionToolsSerializer(ModelSerializer):
+    class Meta:
+        model = Tool
+        fields = ('id', 'name',)
+
+
+class SolutionMaterialsSerializer(ModelSerializer):
+    class Meta:
+        model= Material
+        fields = ('id', 'name',)
+
+
+class SolutionImagesSerializer(ModelSerializer):
+    class Meta:
+        model = SolutionImage
+        fields = ('id', 'image',)
+
+
 class SolutionSerializer(ModelSerializer):
     categories = SolutionCategorySerializer(read_only=True, many=True)
+    tools = SolutionToolsSerializer(read_only=True, many=True)
+    materials = SolutionMaterialsSerializer(read_only=True, many=True)
+    images = SolutionImagesSerializer(read_only=True, many=True)
 
     class Meta:
         model = Solution
         fields = (
-            'name', 'description', 'categories',
-            'main_image', 'attachment', 'instruction',
-            'materials', 'tools', 'approved_by',
+            'code', 'name', 'need_description', 'definition',
+            'categories', 'main_image', 'attachment', 'instruction',
+            'materials', 'tools', 'approved_by', 'images'
         )
 
 

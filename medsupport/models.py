@@ -78,15 +78,39 @@ class SolutionCategory(models.Model):
         return self.name
 
 
+class Material(models.Model):
+    name = models.CharField("Назва матеріалу", max_length=200)
+
+    class Meta:
+        verbose_name = "Матеріал"
+        verbose_name_plural = "Матеріали"
+
+    def __str__(self):
+        return self.name
+
+
+class Tool(models.Model):
+    name = models.CharField("Назва інструменту", max_length=200)
+
+    class Meta:
+        verbose_name = "Засіб"
+        verbose_name_plural = "Засоби"
+
+    def __str__(self):
+        return self.name
+
+
 class Solution(models.Model):
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
-    description = models.TextField("Опис", max_length=1000)
-    main_image = models.ImageField("Головне зображення", upload_to="solution_images", blank=True)
-    attachment = models.FileField("Архів з файлами", upload_to="solution_attachment", blank=True)
-    instruction = models.TextField("Інструкція", max_length=1000, blank=True)
-    materials = models.CharField("Матеріали, з яких можна виготовляти", max_length=200, blank=True)
-    tools = models.CharField("Засоби для виготовлення", max_length=200, blank=True)
+    code = models.CharField("Код товару", max_length=10, default="-")
+    need_description = models.TextField("Опис потреби", max_length=1000)
+    definition = models.TextField("Визначення", max_length=1000)
+    main_image = models.ImageField("Головне зображення", upload_to="solution_images")
+    attachment = models.FileField("Архів з файлами", upload_to="solution_attachment")
+    instruction = models.TextField("Варіанти виготовлення", max_length=1000)
+    materials = models.ManyToManyField(Material, verbose_name="Матеріали, з яких можна виготовляти")
+    tools = models.ManyToManyField(Tool, verbose_name="Засоби для виготовлення")
     approved_by = models.CharField("Ким затверджено", max_length=200, blank=True)
 
     class Meta:
@@ -99,7 +123,12 @@ class Solution(models.Model):
 
 class SolutionImage(models.Model):
     image = models.ImageField("Фото рішення", upload_to="solution_images")
-    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
+    solution = models.ForeignKey(
+        Solution,
+        related_name='images',
+        verbose_name="Рішення",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         verbose_name = "Фото"

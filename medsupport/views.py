@@ -4,16 +4,18 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from .choices import REGION
 from .serializers import (
     HospitalSerializer, HospitalNeedSerializer,
     HospitalShortSerializer, HospitalDetailedSerializer,
     HospitalCategorySerializer, SolutionCategorySerializer,
-    SolutionSerializer,
+    SolutionSerializer, SolutionMaterialsSerializer,
+    SolutionToolsSerializer
 )
 from .models import (
     Hospital, HospitalNeed,
     HospitalCategory, SolutionCategory,
-    Solution,
+    Solution, Material, Tool
 )
 
 
@@ -24,7 +26,7 @@ class HomePageView(TemplateView):
 class HospitalsViewSet(ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalDetailedSerializer
-    filterset_fields = ('region', 'categories')
+    # filterset_fields = ('region', 'categories')
 
     def get_serializer_class(self):
         if self.action in ['retrieve']:
@@ -44,6 +46,23 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
         serializer = HospitalCategorySerializer(qs, many=True)
         return Response(serializer.data, status=200)
 
+    @swagger_auto_schema(responses={200: SolutionCategorySerializer(many=True)})
+    @action(methods=['GET'], detail=False)
+    def needs_categories(self, request, *args, **kwargs):
+        qs = SolutionCategory.objects.all()
+        serializer = SolutionCategorySerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
+    @swagger_auto_schema(responses={200: SolutionCategorySerializer(many=True)})
+    @action(methods=['GET'], detail=False)
+    def region(self, request, *args, **kwargs):
+        if 'region' in self.kwargs:
+            region = self.kwargs['region']
+            # TODO: filter by region
+        qs = Solution.objects.all()
+        serializer = SolutionCategorySerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
 
 class HospitalNeedsViewSet(ReadOnlyModelViewSet):
     queryset = HospitalNeed.objects.all()
@@ -60,4 +79,19 @@ class SolutionsViewSet(ReadOnlyModelViewSet):
         qs = SolutionCategory.objects.all()
         serializer = SolutionCategorySerializer(qs, many=True)
         return Response(serializer.data, status=200)
+
+    @swagger_auto_schema(responses={200: SolutionMaterialsSerializer(many=True)})
+    @action(methods=['GET'], detail=False)
+    def materials(self, request, *args, **kwargs):
+        qs = Material.objects.all()
+        serializer = SolutionMaterialsSerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
+    @swagger_auto_schema(responses={200: SolutionToolsSerializer(many=True)})
+    @action(methods=['GET'], detail=False)
+    def tools(self, request, *args, **kwargs):
+        qs = Tool.objects.all()
+        serializer = SolutionToolsSerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
 
