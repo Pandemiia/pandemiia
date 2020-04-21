@@ -1,13 +1,14 @@
 from django.db.models import Count, Q
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from drf_yasg.openapi import Parameter
+from drf_yasg.openapi import Parameter, Items
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .choices import REGION_CHOICES
+from .filters import HospitalFilterSet
 from .serializers import (
     HospitalSerializer, HospitalNeedSerializer,
     HospitalShortSerializer, HospitalDetailedSerializer,
@@ -29,7 +30,7 @@ class HomePageView(TemplateView):
 class HospitalsViewSet(ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalDetailedSerializer
-    filterset_fields = ('region', 'categories')
+    filterset_class = HospitalFilterSet
 
     def get_serializer_class(self):
         if self.action in ['retrieve']:

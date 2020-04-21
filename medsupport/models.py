@@ -36,6 +36,7 @@ class Hospital(models.Model):
     class Meta:
         verbose_name = "Медичний заклад"
         verbose_name_plural = "Медичні заклади"
+        ordering = ['pk']
 
     def __str__(self):
         if self.name:
