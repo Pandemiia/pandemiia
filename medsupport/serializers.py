@@ -26,7 +26,7 @@ class HospitalCategorySerializer(ModelSerializer):
         fields = ('id', 'name', 'related_hospitals_number')
 
     def get_related_hospitals_number(self, category_object) -> int:  # for proper swagger  model
-        return category_object.hospitalsmodel_set.count()
+        return category_object.hospital_set.count()
 
 
 class HospitalShortSerializer(ModelSerializer):
