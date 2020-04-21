@@ -19,14 +19,14 @@ class ContactSerializer(ModelSerializer):
 
 
 class HospitalCategorySerializer(ModelSerializer):
-    related_points_number = SerializerMethodField()
+    related_hospitals_number = SerializerMethodField()
 
     class Meta:
         model = HospitalCategory
-        fields = ('id', 'name', 'related_points_number')
+        fields = ('id', 'name', 'related_hospitals_number')
 
-    def get_related_points_number(self, category_object) -> int:  # for proper swagger  model
-        return category_object.pointmodel_set.count()
+    def get_related_hospitals_number(self, category_object) -> int:  # for proper swagger  model
+        return category_object.hospitalmodel_set.count()
 
 
 class HospitalShortSerializer(ModelSerializer):

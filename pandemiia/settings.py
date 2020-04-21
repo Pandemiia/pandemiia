@@ -76,7 +76,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'django_filters',
 
-    
     # local apps 
     'medsupport',
     'users',
