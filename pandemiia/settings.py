@@ -74,6 +74,8 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'django_filters',
+
     
     # local apps 
     'medsupport',
