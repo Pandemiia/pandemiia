@@ -81,6 +81,12 @@ class HospitalDetailedSerializer(HospitalSerializer):
         )
 
 
+class HospitalRegionsSerializer(Serializer):
+    key = serializers.IntegerField()
+    name = serializers.CharField()
+    hospitals_in_region = serializers.IntegerField()
+
+
 class SolutionCategorySerializer(ModelSerializer):
     class Meta:
         model = SolutionCategory
@@ -116,7 +122,7 @@ class SolutionSerializer(ModelSerializer):
         fields = (
             'code', 'name', 'need_description', 'definition',
             'categories', 'main_image', 'attachment', 'instruction',
-            'materials', 'tools', 'approved_by', 'images'
+            'materials', 'tools', 'approved_by', 'images', 'source',
         )
 
 

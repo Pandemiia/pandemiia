@@ -6,8 +6,7 @@ NEED_UNITS = Choices(
     ('vials', 'фл'),
 )
 
-REGION = Choices(
-    (0, "----"),
+REGION_CHOICES = Choices(
     (1, "Вінницька область"),
     (2, "Волинська область"),
     (3, "Дніпропетровська область"),

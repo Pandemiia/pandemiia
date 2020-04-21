@@ -1,17 +1,20 @@
+from django.db.models import Count, Q
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
+from drf_yasg.openapi import Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .choices import REGION
+from .choices import REGION_CHOICES
 from .serializers import (
     HospitalSerializer, HospitalNeedSerializer,
     HospitalShortSerializer, HospitalDetailedSerializer,
     HospitalCategorySerializer, SolutionCategorySerializer,
     SolutionSerializer, SolutionMaterialsSerializer,
-    SolutionToolsSerializer
-)
+    SolutionToolsSerializer,
+    HospitalRegionsSerializer)
 from .models import (
     Hospital, HospitalNeed,
     HospitalCategory, SolutionCategory,
@@ -26,7 +29,7 @@ class HomePageView(TemplateView):
 class HospitalsViewSet(ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalDetailedSerializer
-    # filterset_fields = ('region', 'categories')
+    filterset_fields = ('region', 'categories')
 
     def get_serializer_class(self):
         if self.action in ['retrieve']:
@@ -53,14 +56,22 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
         serializer = SolutionCategorySerializer(qs, many=True)
         return Response(serializer.data, status=200)
 
-    @swagger_auto_schema(responses={200: SolutionCategorySerializer(many=True)})
+    @swagger_auto_schema(responses={200: HospitalRegionsSerializer(many=True)})
     @action(methods=['GET'], detail=False)
-    def region(self, request, *args, **kwargs):
-        if 'region' in self.kwargs:
-            region = self.kwargs['region']
-            # TODO: filter by region
-        qs = Solution.objects.all()
-        serializer = SolutionCategorySerializer(qs, many=True)
+    def regions(self, request, *args, **kwargs):
+        # Count all hospitals by region in one request to db
+        # -> {region_key_1: amount_1, region_key_n: amount_n}
+        hospitals_counted_by_region = Hospital.objects.aggregate(
+            **{str(region_key): Count('pk', filter=Q(region=region_key))
+               for region_key, _ in REGION_CHOICES}
+        )
+        data = [
+            {'key': key,
+             'name': name,
+             'hospitals_in_region': hospitals_counted_by_region[str(key)]}
+            for key, name in REGION_CHOICES
+        ]
+        serializer = HospitalRegionsSerializer(data, many=True)
         return Response(serializer.data, status=200)
 
 
