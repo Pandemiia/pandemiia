@@ -8,7 +8,8 @@ from .models import (
     HospitalNeed, Hospital,
     HospitalCategory, Contact,
     Solution, SolutionCategory,
-    Tool, Material, SolutionImage
+    Tool, Material, SolutionImage,
+    SolutionType
 )
 
 
@@ -126,13 +127,21 @@ class SolutionSerializer(ModelSerializer):
         )
 
 
-class HospitalNeedSerializer(ModelSerializer):
+class SolutionTypeSerializer(ModelSerializer):
     solution = SolutionSerializer()
+
+    class Meta:
+        model = SolutionType
+        fields = ('solution',)
+
+
+class HospitalNeedSerializer(ModelSerializer):
+    solution_type = SolutionTypeSerializer()
     units = SerializerMethodField()
 
     class Meta:
         model = HospitalNeed
-        fields = ('id', 'hospital', 'solution', 'units', 'quantity_needed', 'quantity_received')
+        fields = ('id', 'hospital', 'solution_type', 'units', 'quantity_needed', 'quantity_received')
 
     def get_units(self, obj):
         return obj.get_units_display()

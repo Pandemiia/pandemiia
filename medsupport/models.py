@@ -101,7 +101,20 @@ class Tool(models.Model):
         return self.name
 
 
+class SolutionType(models.Model):
+    name = models.CharField("Назва типу товару товару", max_length=200)
+
+    class Meta:
+        verbose_name = "Тип засобу"
+        verbose_name_plural = "Тип засобів"
+
+    def __str__(self):
+        return self.name
+
+
 class Solution(models.Model):
+    solution_type = models.ForeignKey(SolutionType, verbose_name='Тип рішення',
+                                      blank=True, null=True, on_delete=models.CASCADE)
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     code = models.CharField("Код товару", max_length=10, default="-")
@@ -109,7 +122,7 @@ class Solution(models.Model):
     definition = models.TextField("Визначення", max_length=1000)
     main_image = models.ImageField("Головне зображення", upload_to="solution_images")
     # attachment = models.FileField("Архів з файлами", upload_to="solution_attachment")
-    attachment = models.CharField("Посилання на завантаження архіву", max_length=200, blank=True)
+    attachment = models.URLField("Посилання на завантаження архіву", max_length=200, blank=True)
     instruction = models.TextField("Варіанти виготовлення", max_length=1000)
     materials = models.ManyToManyField(Material, verbose_name="Матеріали, з яких можна виготовляти")
     tools = models.ManyToManyField(Tool, verbose_name="Засоби для виготовлення")
@@ -142,7 +155,7 @@ class SolutionImage(models.Model):
 
 
 class HospitalNeed(models.Model):
-    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
+    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення", on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
@@ -160,5 +173,5 @@ class HospitalNeed(models.Model):
         verbose_name_plural = "Потреби"
 
     def __str__(self):
-        return self.solution.name
+        return self.solution_type.name
 
