@@ -78,6 +78,7 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
 
 class HospitalNeedsViewSet(ReadOnlyModelViewSet):
     queryset = HospitalNeed.objects.all()
+    # print(queryset)
     serializer_class = HospitalNeedSerializer
 
 

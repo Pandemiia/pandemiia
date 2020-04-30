@@ -113,7 +113,7 @@ class SolutionType(models.Model):
 
 
 class Solution(models.Model):
-    solution_type = models.ForeignKey(SolutionType, verbose_name='Тип рішення',
+    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення", related_name='solution_types',
                                       blank=True, null=True, on_delete=models.CASCADE)
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
@@ -155,7 +155,7 @@ class SolutionImage(models.Model):
 
 
 class HospitalNeed(models.Model):
-    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення", on_delete=models.CASCADE)
+    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення",on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
