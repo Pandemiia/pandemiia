@@ -127,12 +127,24 @@ class SolutionSerializer(ModelSerializer):
         )
 
 
+class SolutionShortSerializer(ModelSerializer):
+    tools = SolutionToolsSerializer(read_only=True, many=True)
+    materials = SolutionMaterialsSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Solution
+        fields = (
+            'code', 'name', 'main_image', 'attachment',
+            'materials', 'tools', 'approved_by',
+        )
+
+
 class SolutionTypeSerializer(ModelSerializer):
-    solution = SolutionSerializer(read_only=True, many=True)
+    solutions = SolutionShortSerializer(read_only=True, many=True)
 
     class Meta:
         model = SolutionType
-        fields = ('name', 'solution',)
+        fields = ('name', 'solutions',)
 
 
 class HospitalNeedSerializer(ModelSerializer):
