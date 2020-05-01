@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.db.models import Sum
 
 from users.models import User
 from .choices import REGION_CHOICES, NEED_UNITS
@@ -42,6 +43,16 @@ class Hospital(models.Model):
         if self.name:
             return self.name
         return str(self.pk)
+
+    @property
+    def need_types(self):
+        # TODO: refactor to avoid multiple queries on list
+        return SolutionType.objects.filter(
+            hospital_needs__hospital=self
+        ).annotate(
+            received=Sum('hospital_needs__quantity_received'),
+            needed=Sum('hospital_needs__quantity_needed')
+        )
 
 
 class Contact(models.Model):
@@ -103,6 +114,12 @@ class Tool(models.Model):
 
 class SolutionType(models.Model):
     name = models.CharField("Назва типу товару товару", max_length=200)
+    units = models.CharField(
+        "Одиниці вимірювання",
+        choices=NEED_UNITS,
+        default=NEED_UNITS.pieces,
+        max_length=255,
+    )
 
     class Meta:
         verbose_name = "Тип засобу"
@@ -113,8 +130,13 @@ class SolutionType(models.Model):
 
 
 class Solution(models.Model):
-    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення", related_name='solutions',
-                                      blank=True, null=True, on_delete=models.CASCADE)
+    solution_type = models.ForeignKey(
+        SolutionType,
+        verbose_name="Тип рішення",
+        related_name='solutions',
+        blank=True, null=True,
+        on_delete=models.CASCADE,
+    )
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     code = models.CharField("Код товару", max_length=10, default="-")
@@ -155,16 +177,20 @@ class SolutionImage(models.Model):
 
 
 class HospitalNeed(models.Model):
-    solution_type = models.ForeignKey(SolutionType, verbose_name="Тип рішення", on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
+    solution_type = models.ForeignKey(
+        SolutionType,
+        related_name='hospital_needs',
+        verbose_name="Тип рішення",
+        on_delete=models.CASCADE,
+    )
+    hospital = models.ForeignKey(
+        Hospital,
+        related_name='needs',
+        verbose_name="Лікарня",
+        on_delete=models.CASCADE,
+    )
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
-    units = models.CharField(
-        "Одиниці вимірювання",
-        choices=NEED_UNITS,
-        default=NEED_UNITS.pieces,
-        max_length=255,
-    )
     created = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
     edited = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
 

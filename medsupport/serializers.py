@@ -1,3 +1,4 @@
+from django.db.models import Count, Sum
 from rest_framework import serializers
 from rest_framework.serializers import (
     ModelSerializer, StringRelatedField,
@@ -30,18 +31,19 @@ class HospitalCategorySerializer(ModelSerializer):
         return category_object.hospital_set.count()
 
 
-class HospitalShortSerializer(ModelSerializer):
-    categories = HospitalCategorySerializer(read_only=True, many=True)
+class NeedSolutionTypeSerializer(serializers.ModelSerializer):
+    # N.B! annotated fields
+    received = serializers.IntegerField(read_only=True)
+    needed = serializers.IntegerField(read_only=True)
 
     class Meta:
-        model = Hospital
-        fields = ('id', 'name', 'region', 'categories')
-
-    def get_region(self, obj):
-        return obj.get_region_display()
+        model = SolutionType
+        fields = ('id', 'name', 'received', 'needed')
 
 
-class HospitalSerializer(HospitalShortSerializer):
+class HospitalSerializer(ModelSerializer):
+    categories = HospitalCategorySerializer(read_only=True, many=True)
+    need_types = NeedSolutionTypeSerializer(read_only=True, many=True)
     contacts = ContactSerializer(read_only=True, many=True)
 
     class Meta:
@@ -49,7 +51,7 @@ class HospitalSerializer(HospitalShortSerializer):
         fields = (
             'id', 'name', 'description',
             'categories', 'contacts', 'company_code',
-            'email', 'region',
+            'email', 'region', 'need_types'
         )
 
     def get_region(self, obj):
@@ -70,7 +72,6 @@ class HospitalSerializer(HospitalShortSerializer):
           }}
         data.update(a)
         return data
-
 
 class HospitalDetailedSerializer(HospitalSerializer):
     class Meta:
@@ -102,7 +103,7 @@ class SolutionToolsSerializer(ModelSerializer):
 
 class SolutionMaterialsSerializer(ModelSerializer):
     class Meta:
-        model= Material
+        model = Material
         fields = ('id', 'name',)
 
 
