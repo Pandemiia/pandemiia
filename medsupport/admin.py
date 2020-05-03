@@ -4,14 +4,14 @@ from .models import  (
     HospitalCategory, SolutionCategory,
     Solution, HospitalNeed,
     SolutionImage, Tool,
-    Material
+    Material, SolutionType
 )
 
 
 class NeedInline(admin.TabularInline):
     model = HospitalNeed
-    fields = ('solution', ('quantity_needed', 'quantity_received'), 'units',)
-    autocomplete_fields = ['solution']
+    fields = ('solution_type', ('quantity_needed', 'quantity_received'),)
+    autocomplete_fields = ['solution_type']
     extra = 1
 
 
@@ -43,11 +43,16 @@ class MaterialAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(SolutionType)
+class SolutionTypeAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+
+
 @admin.register(Solution)
 class SolutionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': (('code', 'name'), 'need_description', 'definition')
+            'fields': (('code', 'name'), 'solution_type', 'need_description', 'definition')
         }),
         ("Категорія", {
             'classes': ('collapse',),

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.db.models import Sum
 
 from users.models import User
 from .choices import REGION_CHOICES, NEED_UNITS
@@ -43,9 +44,19 @@ class Hospital(models.Model):
             return self.name
         return str(self.pk)
 
+    @property
+    def need_types(self):
+        # TODO: refactor to avoid multiple queries on list
+        return SolutionType.objects.filter(
+            hospital_needs__hospital=self
+        ).annotate(
+            received=Sum('hospital_needs__quantity_received'),
+            needed=Sum('hospital_needs__quantity_needed')
+        )
+
 
 class Contact(models.Model):
-    hospital = models.ForeignKey(Hospital, related_name='hospitals', on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital, related_name='contacts', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
     email = models.EmailField("Email", unique=True, blank=True)
@@ -101,7 +112,31 @@ class Tool(models.Model):
         return self.name
 
 
+class SolutionType(models.Model):
+    name = models.CharField("Назва типу товару товару", max_length=200)
+    units = models.CharField(
+        "Одиниці вимірювання",
+        choices=NEED_UNITS,
+        default=NEED_UNITS.pieces,
+        max_length=255,
+    )
+
+    class Meta:
+        verbose_name = "Тип засобу"
+        verbose_name_plural = "Тип засобів"
+
+    def __str__(self):
+        return self.name
+
+
 class Solution(models.Model):
+    solution_type = models.ForeignKey(
+        SolutionType,
+        verbose_name="Тип рішення",
+        related_name='solutions',
+        blank=True, null=True,
+        on_delete=models.CASCADE,
+    )
     categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     code = models.CharField("Код товару", max_length=10, default="-")
@@ -109,7 +144,7 @@ class Solution(models.Model):
     definition = models.TextField("Визначення", max_length=1000)
     main_image = models.ImageField("Головне зображення", upload_to="solution_images")
     # attachment = models.FileField("Архів з файлами", upload_to="solution_attachment")
-    attachment = models.CharField("Посилання на завантаження архіву", max_length=200, blank=True)
+    attachment = models.URLField("Посилання на завантаження архіву", max_length=200, blank=True)
     instruction = models.TextField("Варіанти виготовлення", max_length=1000)
     materials = models.ManyToManyField(Material, verbose_name="Матеріали, з яких можна виготовляти")
     tools = models.ManyToManyField(Tool, verbose_name="Засоби для виготовлення")
@@ -142,16 +177,20 @@ class SolutionImage(models.Model):
 
 
 class HospitalNeed(models.Model):
-    solution = models.ForeignKey(Solution, verbose_name="Рішення", on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital, verbose_name="Лікарня", on_delete=models.CASCADE)
+    solution_type = models.ForeignKey(
+        SolutionType,
+        related_name='hospital_needs',
+        verbose_name="Тип рішення",
+        on_delete=models.CASCADE,
+    )
+    hospital = models.ForeignKey(
+        Hospital,
+        related_name='needs',
+        verbose_name="Лікарня",
+        on_delete=models.CASCADE,
+    )
     quantity_needed = models.PositiveIntegerField("Скільки ще потрібно", default=0)
     quantity_received = models.PositiveIntegerField("Скільки вже отримано", default=0)
-    units = models.CharField(
-        "Одиниці вимірювання",
-        choices=NEED_UNITS,
-        default=NEED_UNITS.pieces,
-        max_length=255,
-    )
     created = models.DateTimeField("Дата створення", auto_now_add=True, blank=True, null=True)
     edited = models.DateTimeField("Востаннє відредаговано", auto_now=True, blank=True, null=True)
 
@@ -160,5 +199,5 @@ class HospitalNeed(models.Model):
         verbose_name_plural = "Потреби"
 
     def __str__(self):
-        return self.solution.name
+        return self.solution_type.name
 
