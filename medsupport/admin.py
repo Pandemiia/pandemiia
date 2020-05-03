@@ -10,7 +10,7 @@ from .models import  (
 
 class NeedInline(admin.TabularInline):
     model = HospitalNeed
-    fields = ('solution_type', ('quantity_needed', 'quantity_received'), 'units',)
+    fields = ('solution_type', ('quantity_needed', 'quantity_received'),)
     autocomplete_fields = ['solution_type']
     extra = 1
 

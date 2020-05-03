@@ -142,10 +142,14 @@ class SolutionShortSerializer(ModelSerializer):
 
 class SolutionTypeSerializer(ModelSerializer):
     solutions = SolutionShortSerializer(read_only=True, many=True)
+    units = SerializerMethodField()
+
+    def get_units(self, obj):
+        return obj.get_units_display()
 
     class Meta:
         model = SolutionType
-        fields = ('name', 'solutions',)
+        fields = ('name', 'units', 'solutions')
 
 
 class HospitalNeedSerializer(ModelSerializer):
@@ -155,15 +159,12 @@ class HospitalNeedSerializer(ModelSerializer):
         model = HospitalNeed
         fields = ('id', 'hospital', 'solution_type', )
 
-    def get_units(self, obj):
-        return obj.get_units_display()
-
     def to_representation(self, instance):
         data = super(HospitalNeedSerializer, self).to_representation(instance)
         q = {'quantity': {
             'needed': instance.quantity_needed,
             'received': instance.quantity_received,
-            'units': self.get_units(instance)
+            # 'units': self.get_units(instance)
         }}
         data.update(q)
         return data
