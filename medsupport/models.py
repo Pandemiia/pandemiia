@@ -18,7 +18,7 @@ class HospitalCategory(models.Model):
 
 
 class Hospital(models.Model):
-    users = models.ManyToManyField(User, verbose_name="Логін користувача")
+    users = models.ManyToManyField(User, blank=True, verbose_name="Логін користувача")
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
     categories = models.ManyToManyField(HospitalCategory)
@@ -59,7 +59,7 @@ class Contact(models.Model):
     hospital = models.ForeignKey(Hospital, related_name='contacts', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
-    email = models.EmailField("Email", unique=True, blank=True)
+    email = models.EmailField("Email", blank=True)
     phone = models.CharField(
         "Контактний телефон",
         max_length=13,
@@ -114,6 +114,7 @@ class Tool(models.Model):
 
 class SolutionType(models.Model):
     name = models.CharField("Назва типу товару товару", max_length=200)
+    categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     units = models.CharField(
         "Одиниці вимірювання",
         choices=NEED_UNITS,
@@ -129,6 +130,23 @@ class SolutionType(models.Model):
         return self.name
 
 
+class ApprovedBy(models.Model):
+    org_name = models.CharField("Назва організації", max_length=200, blank=True)
+    logo = models.ImageField(
+        "Логотип установи",
+        blank=True,
+        null=True,
+        upload_to="approved_by_logo"
+    )
+
+    class Meta:
+        verbose_name = "Ким затверджено"
+        verbose_name_plural = "Ким затверджені"
+
+    def __str__(self):
+        return self.org_name
+
+
 class Solution(models.Model):
     solution_type = models.ForeignKey(
         SolutionType,
@@ -137,7 +155,6 @@ class Solution(models.Model):
         blank=True, null=True,
         on_delete=models.CASCADE,
     )
-    categories = models.ManyToManyField(SolutionCategory, verbose_name="Категорії")
     name = models.CharField("Назва товару", max_length=200)
     code = models.CharField("Код товару", max_length=10, default="-")
     need_description = models.TextField("Опис потреби", max_length=1000)
@@ -148,7 +165,14 @@ class Solution(models.Model):
     instruction = models.TextField("Варіанти виготовлення", max_length=1000)
     materials = models.ManyToManyField(Material, verbose_name="Матеріали, з яких можна виготовляти")
     tools = models.ManyToManyField(Tool, verbose_name="Засоби для виготовлення")
-    approved_by = models.CharField("Ким затверджено", max_length=200, blank=True)
+    approved_by = models.ForeignKey(
+        ApprovedBy,
+        verbose_name="Ким затверджено",
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    comment = models.CharField("Короткий коментар від затверджувача", blank=True, max_length=100)
+
     source = models.URLField("Джерело", blank=True)
 
     class Meta:

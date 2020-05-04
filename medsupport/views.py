@@ -12,12 +12,14 @@ from .serializers import (
     HospitalDetailedSerializer,
     HospitalCategorySerializer, SolutionCategorySerializer,
     SolutionSerializer, SolutionMaterialsSerializer,
-    SolutionToolsSerializer,
-    HospitalRegionsSerializer)
+    SolutionToolsSerializer, SolutionTypeSerializer,
+    HospitalRegionsSerializer
+)
 from .models import (
     Hospital, HospitalNeed,
     HospitalCategory, SolutionCategory,
-    Solution, Material, Tool
+    Solution, Material, Tool,
+    SolutionType,
 )
 
 
@@ -81,6 +83,13 @@ class SolutionsViewSet(ReadOnlyModelViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
     filterset_class = SolutionFilterSet
+
+    @swagger_auto_schema(responses={200: SolutionTypeSerializer(many=True)})
+    @action(methods=['GET'], detail=False)
+    def type(self, request, *args, **kwargs):
+        qs = SolutionType.objects.all()
+        serializer = SolutionTypeSerializer(qs, many=True)
+        return Response(serializer.data, status=200)
 
     @swagger_auto_schema(responses={200: SolutionCategorySerializer(many=True)})
     @action(methods=['GET'], detail=False)

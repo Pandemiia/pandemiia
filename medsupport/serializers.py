@@ -10,7 +10,7 @@ from .models import (
     HospitalCategory, Contact,
     Solution, SolutionCategory,
     Tool, Material, SolutionImage,
-    SolutionType
+    SolutionType, ApprovedBy
 )
 
 
@@ -113,34 +113,44 @@ class SolutionImagesSerializer(ModelSerializer):
         fields = ('id', 'image',)
 
 
+class ApprovedBySerializer(ModelSerializer):
+    class Meta:
+        model = ApprovedBy
+        fields = ('id', 'org_name', 'logo')
+
+
 class SolutionSerializer(ModelSerializer):
-    categories = SolutionCategorySerializer(read_only=True, many=True)
     tools = SolutionToolsSerializer(read_only=True, many=True)
     materials = SolutionMaterialsSerializer(read_only=True, many=True)
     images = SolutionImagesSerializer(read_only=True, many=True)
+    solution_type = PrimaryKeyRelatedField(read_only=True)
+    approved_by = ApprovedBySerializer(read_only=True)
 
     class Meta:
         model = Solution
         fields = (
-            'code', 'name', 'need_description', 'definition',
-            'categories', 'main_image', 'attachment', 'instruction',
-            'materials', 'tools', 'approved_by', 'images', 'source',
+            'solution_type', 'code', 'name', 'need_description', 'definition',
+            'main_image', 'attachment', 'instruction', 'materials', 'tools',
+            'approved_by', 'comment', 'images', 'source',
         )
 
 
 class SolutionShortSerializer(ModelSerializer):
     tools = SolutionToolsSerializer(read_only=True, many=True)
     materials = SolutionMaterialsSerializer(read_only=True, many=True)
+    solution_type = PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Solution
         fields = (
-            'code', 'name', 'main_image', 'attachment',
+            'id', 'solution_type', 'code', 'name',
+            'main_image', 'attachment',
             'materials', 'tools', 'approved_by',
         )
 
 
 class SolutionTypeSerializer(ModelSerializer):
+    categories = SolutionCategorySerializer(read_only=True, many=True)
     solutions = SolutionShortSerializer(read_only=True, many=True)
     units = SerializerMethodField()
 
@@ -149,7 +159,7 @@ class SolutionTypeSerializer(ModelSerializer):
 
     class Meta:
         model = SolutionType
-        fields = ('name', 'units', 'solutions')
+        fields = ('name', 'categories', 'units', 'solutions')
 
 
 class HospitalNeedSerializer(ModelSerializer):
@@ -164,7 +174,6 @@ class HospitalNeedSerializer(ModelSerializer):
         q = {'quantity': {
             'needed': instance.quantity_needed,
             'received': instance.quantity_received,
-            # 'units': self.get_units(instance)
         }}
         data.update(q)
         return data

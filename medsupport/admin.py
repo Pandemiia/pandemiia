@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import  (
+from .models import (
     Hospital,  Contact,
     HospitalCategory, SolutionCategory,
     Solution, HospitalNeed,
     SolutionImage, Tool,
-    Material, SolutionType
+    Material, SolutionType,
+    ApprovedBy
 )
 
 
@@ -43,9 +44,15 @@ class MaterialAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(ApprovedBy)
+class ApprovedByAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(SolutionType)
 class SolutionTypeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
+    filter_horizontal = ('categories',)
 
 
 @admin.register(Solution)
@@ -54,21 +61,20 @@ class SolutionAdmin(admin.ModelAdmin):
         (None, {
             'fields': (('code', 'name'), 'solution_type', 'need_description', 'definition')
         }),
-        ("Категорія", {
-            'classes': ('collapse',),
-            'fields': ('categories',)
-        }),
         (None, {
-            'fields': (('main_image', 'attachment'), 'instruction', 'approved_by')
+            'fields': (('main_image', 'attachment'), 'instruction')
         }),
         ("Матеріали та засоби", {
             'classes': ('collapse',),
             'fields': ('materials', 'tools')
+        }),
+        ("Затвердження", {
+            'fields': (('approved_by', 'comment'),)
         })
 
     )
     search_fields = ('name',)
-    filter_horizontal = ('categories', 'materials', 'tools')
+    filter_horizontal = ('materials', 'tools')
     inlines = (SolutionImageInline,)
 
 
