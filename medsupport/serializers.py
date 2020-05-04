@@ -114,7 +114,6 @@ class SolutionImagesSerializer(ModelSerializer):
 
 
 class SolutionSerializer(ModelSerializer):
-    categories = SolutionCategorySerializer(read_only=True, many=True)
     tools = SolutionToolsSerializer(read_only=True, many=True)
     materials = SolutionMaterialsSerializer(read_only=True, many=True)
     images = SolutionImagesSerializer(read_only=True, many=True)
@@ -123,7 +122,7 @@ class SolutionSerializer(ModelSerializer):
         model = Solution
         fields = (
             'code', 'name', 'need_description', 'definition',
-            'categories', 'main_image', 'attachment', 'instruction',
+            'main_image', 'attachment', 'instruction',
             'materials', 'tools', 'approved_by', 'images', 'source',
         )
 
@@ -141,6 +140,7 @@ class SolutionShortSerializer(ModelSerializer):
 
 
 class SolutionTypeSerializer(ModelSerializer):
+    categories = SolutionCategorySerializer(read_only=True, many=True)
     solutions = SolutionShortSerializer(read_only=True, many=True)
     units = SerializerMethodField()
 
@@ -149,7 +149,7 @@ class SolutionTypeSerializer(ModelSerializer):
 
     class Meta:
         model = SolutionType
-        fields = ('name', 'units', 'solutions')
+        fields = ('name', 'categories', 'units', 'solutions')
 
 
 class HospitalNeedSerializer(ModelSerializer):
