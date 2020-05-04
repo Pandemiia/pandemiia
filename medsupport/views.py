@@ -35,6 +35,10 @@ class HospitalsViewSet(ReadOnlyModelViewSet):
             return HospitalDetailedSerializer
         return HospitalSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.distinct()
+
     @swagger_auto_schema(responses={200: HospitalCategorySerializer(many=True)})
     @action(methods=['GET'], detail=False)
     def categories(self, request, *args, **kwargs):
