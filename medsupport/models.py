@@ -18,7 +18,7 @@ class HospitalCategory(models.Model):
 
 
 class Hospital(models.Model):
-    users = models.ManyToManyField(User, verbose_name="Логін користувача")
+    users = models.ManyToManyField(User, blank=True, verbose_name="Логін користувача")
     name = models.CharField("Назва медзакладу", max_length=400)
     description = models.CharField("Опис", max_length=1000, blank=True)
     categories = models.ManyToManyField(HospitalCategory)
@@ -59,7 +59,7 @@ class Contact(models.Model):
     hospital = models.ForeignKey(Hospital, related_name='contacts', on_delete=models.CASCADE)
     full_name = models.CharField("ПІБ контактної особи", max_length=200, blank=True)
     position = models.CharField("Посада", max_length=200, blank=True)
-    email = models.EmailField("Email", unique=True, blank=True)
+    email = models.EmailField("Email", blank=True)
     phone = models.CharField(
         "Контактний телефон",
         max_length=13,
