@@ -67,7 +67,6 @@ class Contact(models.Model):
             regex=r'^\+?3?8?(0\d{9})$',
             message="Телефонний номер має бути в форматі +380123456789"
         )],
-        unique=True,
         blank=True
     )
 
