@@ -84,6 +84,10 @@ class SolutionsViewSet(ReadOnlyModelViewSet):
     serializer_class = SolutionSerializer
     filterset_class = SolutionFilterSet
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.distinct()
+
     @swagger_auto_schema(responses={200: SolutionTypeSerializer(many=True)})
     @action(methods=['GET'], detail=False)
     def type(self, request, *args, **kwargs):

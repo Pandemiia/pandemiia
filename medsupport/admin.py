@@ -57,6 +57,7 @@ class SolutionTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Solution)
 class SolutionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'solution_type', 'code', 'approved_by')
     fieldsets = (
         (None, {
             'fields': (('code', 'name'), 'solution_type', 'need_description', 'definition')
