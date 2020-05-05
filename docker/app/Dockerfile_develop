@@ -1,0 +1,33 @@
+FROM python:3.7-alpine3.9
+WORKDIR /app
+RUN apk --update add --no-cache libjpeg \
+                                jpeg-dev \
+                                tiff-dev \
+                                lcms2-dev \
+                                libpq \
+                                libwebp-dev \
+                                libxml2-dev \
+                                libxslt-dev \
+                                postgresql-dev \
+                                musl-dev \
+                                gettext \
+                                git \
+                                gcc \
+                                musl-dev \
+                                zlib-dev \
+                                tk-dev \
+                                tcl-dev \
+                                libffi-dev \
+                                libmagic \
+                                py-cffi \
+				nginx 
+
+COPY requirements/ requirements/
+RUN  pip install -r requirements/production.txt --src=/root/pip
+EXPOSE 80
+COPY ./docker-entrypoint.sh /
+RUN  rm -vf /etc/nginx/conf.d/default.conf
+COPY ./moneyflow.conf /etc/nginx/conf.d/
+RUN mkdir -p /run/nginx
+COPY . .
+ENTRYPOINT ["/docker-entrypoint.sh"]
