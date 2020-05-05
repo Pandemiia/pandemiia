@@ -170,7 +170,12 @@ class Solution(models.Model):
         null=True, blank=True,
         on_delete=models.CASCADE
     )
-    comment = models.CharField("Короткий коментар від затверджувача", blank=True, max_length=100)
+    comment = models.CharField(
+        "Короткий коментар від затверджувача",
+        blank=True,
+        max_length=100,
+        default='Поки не додато жодного коментаря'
+    )
 
     source = models.URLField("Джерело", blank=True)
 
