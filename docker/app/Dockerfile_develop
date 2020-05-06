@@ -27,7 +27,7 @@ RUN  pip install -r requirements.txt --src=/root/pip
 EXPOSE 80
 COPY ./docker-entrypoint.sh /
 RUN  rm -vf /etc/nginx/conf.d/default.conf
-COPY ./moneyflow.conf /etc/nginx/conf.d/
+COPY ./pandemiia.conf /etc/nginx/conf.d/
 RUN mkdir -p /run/nginx
 COPY . .
 ENTRYPOINT ["/docker-entrypoint.sh"]
