@@ -20,6 +20,7 @@ RUN apk --update add --no-cache libjpeg \
                                 libffi-dev \
                                 libmagic \
                                 py-cffi \
+                                psycopg2-binary \
 				nginx 
 
 COPY requirements.txt requirements.txt
