@@ -30,20 +30,11 @@
 
   - name: copy env for docker compose
     copy:
-      content: "IMAGE={{image}}:{{tag}}"
+      content: "IMAGE={{tag}}"
       dest: "{{project.dir}}/.env"     
 
-  - name: docker login
-    docker_login:
-      registry: "{{ci_registry}}"
-      username: "{{ci_registry_user}}"
-      password: "{{ci_job_token}}" 
-    no_log: true
-
-  - name: docker pull
-    docker_image:
-      name: "{{image}}"
-      tag: "{{tag}}"
+  - name: pull image
+    shell: "docker pull docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:cicd-3ed8eb2"
 
   - name: build docker compose
     shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} up -d --build"
