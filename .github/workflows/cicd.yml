@@ -33,9 +33,9 @@ jobs:
       name: Check out code
 
     - name: webfactory/ssh-agent
-        uses: webfactory/ssh-agent@v0.2.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      uses: webfactory/ssh-agent@v0.2.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Execute Ansible Playbook
       uses: saubermacherag/ansible-playbook-docker-action@v1.3
