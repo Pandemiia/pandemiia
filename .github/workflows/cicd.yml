@@ -19,6 +19,7 @@ jobs:
       with:
         image: github-repo/image-name
         registry: docker.pkg.github.com
+        githubOrg: override-org
         dockerfile: docker/Dockerfile
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
