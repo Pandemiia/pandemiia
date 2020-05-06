@@ -53,9 +53,9 @@ jobs:
         # If inventoryFile is set you can also specify a custom roles path to install your required roles in.
         rolesPath: # optional
         # Keyfile to use for host connections.
-        keyFile: "pandemiia_key"
+        keyFile: $SSH_PRIVATE_KEY
         # Vault Password to decrypt keyFile.
         keyFileVaultPass: # optional
-        extraVars: "-e image=${{ lol }} -e tag=${{ github.sha }}"
+        extraVars: "-e image=${{ github.sha }} -e tag=${{ github.sha }}"
         # File containing extra vars.
         extraFile: # optional
