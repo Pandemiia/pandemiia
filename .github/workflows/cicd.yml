@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
-        image: Pandemiia/image-name
+        image: pandemiia/image-pandemiia
         registry: docker.pkg.github.com
-        dockerfile: docker/app/Dockerfile_develop
+        dockerfile: docker/app/Dockerfile
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
