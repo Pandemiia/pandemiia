@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v1.0
+      name: Check out code
+
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
         image: github-repo/image-name
         registry: docker.pkg.github.com
+        dockerfile: docker/Dockerfile
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
