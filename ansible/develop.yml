@@ -33,8 +33,17 @@
       content: "IMAGE={{tag}}"
       dest: "{{project.dir}}/.env"     
 
-  - name: pull image
-    shell: "docker pull docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:cicd-3ed8eb2"
+  - name: docker login
+    docker_login:
+      registry: docker.pkg.github.com/pandemiia/pandemiia/pandemiia
+      username: "{{actor}}"
+      password: "{{CUSTOM_TOKEN}}" 
+    no_log: true
+
+  - name: docker pull
+    docker_image:
+      name: pandemiia-image
+      tag: "{{tag}}"
 
   - name: build docker compose
     shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} up -d --build"
