@@ -50,6 +50,6 @@ jobs:
         keyFile: # optional
         # Vault Password to decrypt keyFile.
         keyFileVaultPass: # optional
-        extraVars: "-e ANSIBLE_CONFIG=$(eval echo `readlink -f ansible/ansible.cfg`)"
+        extraVars: 
         # File containing extra vars.
         extraFile: # optional
