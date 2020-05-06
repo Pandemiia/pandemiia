@@ -21,6 +21,7 @@ jobs:
         registry: docker.pkg.github.com
         githubOrg: pandemiia
         dockerfile: docker/app/Dockerfile_develop
+        tag: ${{ github.sha }}
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
 
