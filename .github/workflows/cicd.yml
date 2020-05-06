@@ -53,7 +53,7 @@ jobs:
         # If inventoryFile is set you can also specify a custom roles path to install your required roles in.
         rolesPath: # optional
         # Keyfile to use for host connections.
-        keyFile: # optional
+        keyFile: "pandemiia_key"
         # Vault Password to decrypt keyFile.
         keyFileVaultPass: # optional
         extraVars: 
