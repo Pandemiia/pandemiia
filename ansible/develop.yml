@@ -41,9 +41,7 @@
     no_log: true
 
   - name: docker pull
-    docker_image:
-      name: pandemiia-image
-      tag: "{{tag}}"
+    shell: "docker pull docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:{{ tag }}"
 
   - name: build docker compose
     shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} up -d --build"
