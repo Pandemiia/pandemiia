@@ -17,7 +17,7 @@ jobs:
 
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
-        image: github-repo/image-name
+        image: pandemiia/pandemiia-image
         registry: docker.pkg.github.com
         githubOrg: pandemiia
         dockerfile: docker/Dockerfile
