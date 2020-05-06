@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: 
+      - cicd
+
+jobs:
+
+  build:
+
+    runs-on: docker:stable-git
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - uses: mr-smithers-excellent/docker-build-push@v3
+      with:
+        image: Pandemiia/image-name
+        registry: docker.pkg.github.com
+        dockerfile: docker/app/Dockerfile_develop
+        username: ${{ github.actor }}
+        password: ${{ secrets.CUSTOM_TOKEN }} 
