@@ -20,7 +20,6 @@ RUN apk --update add --no-cache libjpeg \
                                 libffi-dev \
                                 libmagic \
                                 py-cffi \
-
 COPY requirements.txt requirements.txt
 RUN  pip install -r requirements.txt --src=/root/pip
 COPY . .
