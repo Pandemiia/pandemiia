@@ -56,6 +56,6 @@ jobs:
         keyFile: "pandemiia_key"
         # Vault Password to decrypt keyFile.
         keyFileVaultPass: # optional
-        extraVars: 
+        extraVars: "-e image=${{ lol }} -e tag=${{ github.sha }}"
         # File containing extra vars.
         extraFile: # optional
