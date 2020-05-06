@@ -25,6 +25,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
 
+on:
+  watch:
+    types: [started]
+
   deploy:
 
     runs-on: ubuntu-latest
