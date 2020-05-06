@@ -20,6 +20,39 @@ jobs:
         image: pandemiia/pandemiia-image
         registry: docker.pkg.github.com
         githubOrg: pandemiia
-        dockerfile: docker/Dockerfile
+        dockerfile: docker/app/Dockerfile_develop
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+
+    - name: webfactory/ssh-agent
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Execute Ansible Playbook
+      uses: saubermacherag/ansible-playbook-docker-action@v1.3
+      with:
+        playbookName: 'ansible/develop.yml'
+        inventoryFile: 'ansible/inventory'
+        # name of the requirements file to use.
+        requirementsFile: # optional
+        # If inventoryFile is set you can also specify a custom roles path to install your required roles in.
+        rolesPath: # optional
+        # Keyfile to use for host connections.
+        keyFile: # optional
+        # Vault Password to decrypt keyFile.
+        keyFileVaultPass: # optional
+        # String containing all extraVars which you want to be injected into the run.
+        extraVars: # optional
+        # File containing extra vars.
+        extraFile: # optional
+        # Choose one of 4 verbosity levels. See Ansible documentation for details.
+        verbosity: # optional

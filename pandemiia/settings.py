@@ -12,7 +12,14 @@ env = environ.Env(
     DJANGO_ALLOWED_HOSTS=(list, []),
     DJANGO_STATIC_ROOT=(str, str(BASE_DIR('staticfiles'))),
     DJANGO_MEDIA_ROOT=(str, str(BASE_DIR('media'))),
-    DJANGO_DATABASE_URL=(str, 'sqlite:///pandemiia'),
+    
+    # Database
+    POSTGRES_HOST=(str, 'db'),
+    POSTGRES_PORT=(int, 5432),
+    POSTGRES_DB=(str, ''),
+    POSTGRES_USER=(str, ''),
+    POSTGRES_PASSWORD=(str, ''),
+
     DJANGO_EMAIL_URL=(environ.Env.email_url_config, 'consolemail://'),
     DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
@@ -39,7 +46,14 @@ ADMINS = tuple(
 )
 
 DATABASES = {
-    'default': env.db('DJANGO_DATABASE_URL'),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST'),
+        'PORT': env('POSTGRES_PORT'),
+    }
 }
 
 # Email configs

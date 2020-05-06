@@ -1,0 +1,70 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres:10.12-alpine
+    networks:
+      - db
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file:
+      - env/db.env
+    logging:
+      driver: syslog
+      options:
+        tag: docker/db
+
+  app:
+    image: "${IMAGE}"
+    networks:
+      - db
+      - redis
+      - backend
+    volumes:
+      - /home/admin/public/:/home/admin/public/
+    command: |
+      /usr/bin/env sh -c "python manage.py collectstatic --noinput
+        python manage.py migrate
+        gunicorn config.wsgi --bind=0.0.0.0:8001"
+    env_file:
+      - env/app.env
+      - env/db.env
+    depends_on:
+      - db
+    logging:
+      driver: syslog
+      options:
+        tag: docker/app
+
+  nginx:
+    image: nginx
+    networks:
+      - backend
+    volumes:
+      - /home/admin/conf/nginx/conf.d/:/etc/nginx/conf.d/
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /etc/ssl:/etc/ssl
+      - /home/admin/log:/home/admin/log
+      - /home/admin/public/:/home/admin/public/
+      - /home/admin/conf/nginx/html:/usr/share/nginx/html/
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - app
+    logging:
+      driver: syslog
+      options:
+        tag: docker/nginx
+
+
+volumes:
+  db:
+    name: db
+    driver: local
+
+networks:
+  db:
+    driver: bridge
+  backend:
+    driver: bridge
