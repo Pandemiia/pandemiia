@@ -1,6 +1,8 @@
 name: Docker Image CI
 
 on:
+  watch:
+    types: [started]
   push:
     branches: 
       - cicd
@@ -24,10 +26,6 @@ jobs:
         tag: ${{ github.sha }}
         username: ${{ github.actor }}
         password: ${{ secrets.CUSTOM_TOKEN }} 
-
-on:
-  watch:
-    types: [started]
 
   deploy:
 
