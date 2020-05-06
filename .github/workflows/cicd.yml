@@ -35,21 +35,11 @@ jobs:
     - name: SSH
       run: |
        which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y ) |
-       eval $(ssh-agent -s)
-    - name: SSH
-      run: |
-       echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - name: SSH
-      run: |
-       mkdir -p ~/.ssh
-    - name: SSH
-      run: |
-       chmod 700 ~/.ssh
-    - name: SSH
-      run: |
-       ssh-keyscan api.pandemiia.in.ua >> ~/.ssh/known_hosts
-    - name: SSH
-      run: |
+       eval $(ssh-agent -s) |
+       echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null |
+       mkdir -p ~/.ssh |
+       chmod 700 ~/.ssh |
+       ssh-keyscan api.pandemiia.in.ua >> ~/.ssh/known_hosts |
        chmod 644 ~/.ssh/known_hosts
 
 
