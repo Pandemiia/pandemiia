@@ -50,7 +50,6 @@ jobs:
         keyFile: # optional
         # Vault Password to decrypt keyFile.
         keyFileVaultPass: # optional
-        # String containing all extraVars which you want to be injected into the run.
-        extraVars: # optional
+        extraVars: "-e ANSIBLE_CONFIG=$(eval echo `readlink -f ansible/ansible.cfg`)"
         # File containing extra vars.
         extraFile: # optional
