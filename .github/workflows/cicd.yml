@@ -54,5 +54,3 @@ jobs:
         extraVars: # optional
         # File containing extra vars.
         extraFile: # optional
-        # Choose one of 4 verbosity levels. See Ansible documentation for details.
-        verbosity: # optional
