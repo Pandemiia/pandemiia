@@ -11,10 +11,6 @@
 
   tasks:
 
-  - name: get updater name
-    local_action: command git config user.name
-    register: updater
-
   - name: register compose file
     local_action: command readlink -f ../{{ playbook }}
     register: compose_path
