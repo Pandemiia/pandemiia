@@ -22,6 +22,7 @@ RUN apk --update add --no-cache libjpeg \
                                 py-cffi \
 				nginx 
 
+COPY requirements.txt requirements.txt
 RUN  pip install -r requirements.txt --src=/root/pip
 EXPOSE 80
 COPY ./docker-entrypoint.sh /
