@@ -30,7 +30,7 @@
 
   - name: copy env for docker compose
     copy:
-      content: "IMAGE={{tag}}"
+      content: "IMAGE=docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:{{tag}}"
       dest: "{{project.dir}}/.env"     
 
   - name: docker login
