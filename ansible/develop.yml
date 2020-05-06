@@ -12,7 +12,7 @@
   tasks:
 
   - name: register compose file
-    local_action: command readlink -f ../{{ playbook }}
+    local_action: command readlink -f ../develop.yml
     register: compose_path
 
   - name: register docker-compose bin
@@ -46,7 +46,7 @@
       tag: "{{tag}}"
 
   - name: build docker compose
-    shell: "{{ compose_bin.stdout }} -f {{ playbook }} --project-name {{ project.name }} up -d --build"
+    shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} up -d --build"
     args:
       chdir: "{{ project.dir }}"
 
