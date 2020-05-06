@@ -1,8 +1,6 @@
 name: Docker Image CI
 
 on:
-  watch:
-    types: [started]
   push:
     branches: 
       - cicd
@@ -28,6 +26,7 @@ jobs:
         password: ${{ secrets.CUSTOM_TOKEN }} 
 
   deploy:
+    needs: [build]
 
     runs-on: ubuntu-latest
 
