@@ -7,26 +7,10 @@ on:
 
 jobs:
 
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-      name: Check out code
-
-    - uses: mr-smithers-excellent/docker-build-push@v3
-      with:
-        image: pandemiia/pandemiia-image
-        registry: docker.pkg.github.com
-        githubOrg: pandemiia
-        dockerfile: docker/app/Dockerfile_develop
-        tag: ${{ github.sha }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.CUSTOM_TOKEN }} 
+ 
 
   deploy:
-    needs: [build]
+    #needs: [build]
 
     runs-on: ubuntu-latest
 
