@@ -21,6 +21,15 @@ env = environ.Env(
     POSTGRES_USER=(str, ''),
     POSTGRES_PASSWORD=(str, ''),
 
+    #Email
+    DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
+    DJANGO_EMAIL_HOST=(str, ''),
+    DJANGO_EMAIL_USE_TLS=(bool, True),
+    DJANGO_EMAIL_PORT=(int, 587),
+    DJANGO_EMAIL_HOST_USER=(str, 'mail@gmail.com'),
+    DJANGO_EMAIL_HOST_PASSWORD=(str, ''),
+
+
     DJANGO_CELERY_BROKER_URL=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_BACKEND=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_ALWAYS_EAGER=(bool, False),
@@ -102,12 +111,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'pandemiia.ua@gmail.com'
-EMAIL_HOST_PASSWORD = 'Pand4sFfemi3ia'
+EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND')
+EMAIL_HOST = env('DJANGO_EMAIL_HOST')
+EMAIL_USE_TLS = env('DJANGO_EMAIL_USE_TLS')
+EMAIL_PORT = env('DJANGO_EMAIL_PORT')
+EMAIL_HOST_USER = env('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('DJANGO_EMAIL_HOST_PASSWORD')
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
