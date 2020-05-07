@@ -18,15 +18,13 @@ jobs:
     - uses: actions/checkout@v2
       name: Check out code
 
+    - actions/checkout@v1
+
+    - uses: webfactory/ssh-agent@v0.2.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: Execute Ansible Playbook
-      run: |
-       which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y ) |
-       eval $(ssh-agent -s) | 
-       echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
-       mkdir -p ~/.ssh 
-       chmod 700 ~/.ssh 
-       ssh-keyscan api.pandemiia.in.ua >> ~/.ssh/known_hosts
-       chmod 644 ~/.ssh/known_hosts
       uses: saubermacherag/ansible-playbook-docker-action@v1.3
       with:
         playbookName: 'ansible/develop.yml'
