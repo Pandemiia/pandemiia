@@ -59,13 +59,13 @@
 
   - name: backup postgresql database
     shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} exec db pg_dump
-         --no-owner --host={{ dictionary.HOST }}
-         --port={{ dictionary.PORT }}
-         --username={{ dictionary.USER }}
-         --no-password {{ dictionary.NAME }} | gzip >
+         --no-owner --host={{ dictionary.default.HOST }}
+         --port={{ dictionary.default.PORT }}
+         --username={{ dictionary.default.USER }}
+         --no-password {{ dictionary.default.NAME }} | gzip >
          {{ project.base_dir }}/backup/db/{{ project.name }}-$(date +%Y-%m-%d-%H%M%S).sql.gz"
     environment:
-      PGPASSWORD: "{{dictionary.PASSWORD}}"
+      PGPASSWORD: "{{dictionary.default.PASSWORD}}"
     args:
       chdir: "{{ project.dir }}"
     when: docker_db.stdout != "" and docker_app.stdout != ""
