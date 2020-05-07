@@ -1,0 +1,47 @@
+name: Docker Image CI
+
+on:
+  pull_request:
+    branches: 
+      - dev
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+
+    - uses: mr-smithers-excellent/docker-build-push@v3
+      with:
+        image: pandemiia/develop
+        registry: ${{ secrets.REGISTRY }}
+        githubOrg: pandemiia
+        dockerfile: docker/app/Dockerfile_develop
+        tag: ${{ github.sha }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.CUSTOM_TOKEN }} 
+
+  deploy:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+
+    - name: Play Ansible Playbook
+      uses: arillso/action.playbook@0.0.2
+      with:
+          inventory: ansible/inventory
+          playbook: ansible/develop.yml
+          extra_vars: tag=${{ github.sha }} custom_token=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }} image=${{ secrets.IMAGE}} registry=${{ secrets.REGISTRY}}
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
+
+
+

@@ -5,6 +5,7 @@ import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = environ.Path(__file__) - 2  # (/a/myfile.py - 2 = /)
 
+
 env = environ.Env(
     DJANGO_DEBUG=(bool, False),
     DJANGO_SECRET_KEY=(str, 'CHANGEME!!!j&3a)=&eflya=2@hmg!tsa(mb6h3lcno4#p9oct$o1&@l75-%2',),
@@ -12,11 +13,21 @@ env = environ.Env(
     DJANGO_ALLOWED_HOSTS=(list, []),
     DJANGO_STATIC_ROOT=(str, str(BASE_DIR('staticfiles'))),
     DJANGO_MEDIA_ROOT=(str, str(BASE_DIR('media'))),
-    DJANGO_DATABASE_URL=(str, 'sqlite:///pandemiia'),
+    
+    # Database
+    POSTGRES_HOST=(str, 'db'),
+    POSTGRES_PORT=(int, 5432),
+    POSTGRES_DB=(str, ''),
+    POSTGRES_USER=(str, ''),
+    POSTGRES_PASSWORD=(str, ''),
+
+    # Email
     DJANGO_EMAIL_URL=(environ.Env.email_url_config, 'consolemail://'),
-    DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
+    DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_SERVER_EMAIL=(str, 'root@localhost.com'),
+
+
     DJANGO_CELERY_BROKER_URL=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_BACKEND=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_ALWAYS_EAGER=(bool, False),
@@ -25,7 +36,6 @@ env = environ.Env(
     DJANGO_HEALTH_CHECK_BODY=(str, 'Success'),
     DJANGO_SITE_ID=(int, 1)
 )
-environ.Env.read_env()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG')
@@ -39,9 +49,19 @@ ADMINS = tuple(
 )
 
 DATABASES = {
-    'default': env.db('DJANGO_DATABASE_URL'),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST'),
+        'PORT': env('POSTGRES_PORT'),
+    }
 }
 
+<<<<<<< HEAD
+SITE_ID = env('DJANGO_SITE_ID')
+=======
 # Django Email Server
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-backend
 # ------------------------------------------------------------------------------
@@ -63,6 +83,7 @@ SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 
+>>>>>>> origin/dev
 # Application definition
 INSTALLED_APPS = [
     # django apps
@@ -104,6 +125,23 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+# Email configs
+EMAIL_URL = env.email_url('DJANGO_EMAIL_URL')
+EMAIL_BACKEND = EMAIL_URL['EMAIL_BACKEND']
+EMAIL_HOST = EMAIL_URL.get('EMAIL_HOST', '')
+EMAIL_HOST_PASSWORD = EMAIL_URL.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_USER = EMAIL_URL.get('EMAIL_HOST_USER', '')
+EMAIL_PORT = EMAIL_URL.get('EMAIL_PORT', '')
+EMAIL_USE_SSL = 'EMAIL_USE_SSL' in EMAIL_URL
+EMAIL_USE_TLS = 'EMAIL_USE_TLS' in EMAIL_URL
+EMAIL_FILE_PATH = EMAIL_URL.get('EMAIL_FILE_PATH', '')
+EMAIL_SUBJECT_PREFIX = ''
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
+# SECURE_SSL_REDIRECT = False
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'pandemiia.urls'
 

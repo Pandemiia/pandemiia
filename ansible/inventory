@@ -1,0 +1,8 @@
+[develop]
+api.pandemiia.in.ua ansible_ssh_user=admin ansible_ssh_port=22 
+
+[develop:vars]
+server=api.pandemiia.in.ua
+
+
+

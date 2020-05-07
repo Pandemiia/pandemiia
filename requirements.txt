@@ -14,3 +14,4 @@ django-filter==2.2.0
 django-rest-auth==0.9.5
 drf-yasg==1.17.1
 django-model-utils==4.0.0
+psycopg2==2.8.4
