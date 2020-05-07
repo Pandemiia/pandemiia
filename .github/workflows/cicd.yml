@@ -25,9 +25,6 @@ jobs:
     - name: SSH
       run: |
        eval $(ssh-agent -s) | 
-       echo lol
-    - name: SSH
-      run: |
        echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     - name: SSH
       run: |
