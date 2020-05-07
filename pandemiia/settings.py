@@ -102,12 +102,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-EMAIL_BACKEND = ‘django.core.mail.backends.smtp.EmailBackend’
-EMAIL_HOST = ‘smtp.gmail.com’
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ‘pandemiia.ua@gmail.com’
-EMAIL_HOST_PASSWORD = ‘Pand4sFfemi3ia’
+EMAIL_HOST_USER = 'pandemiia.ua@gmail.com'
+EMAIL_HOST_PASSWORD = 'Pand4sFfemi3ia'
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
