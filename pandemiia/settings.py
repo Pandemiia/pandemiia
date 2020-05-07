@@ -108,6 +108,9 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'pandemiia.ua@gmail.com'
 EMAIL_HOST_PASSWORD = 'Pand4sFfemi3ia'
+# SECURE_SSL_REDIRECT = False
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'pandemiia.urls'
 
