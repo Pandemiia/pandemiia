@@ -6,12 +6,26 @@ on:
       - cicd
 
 jobs:
+  build:
 
+    runs-on: ubuntu-latest
 
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
 
+    - uses: mr-smithers-excellent/docker-build-push@v3
+      with:
+        image: pandemiia/develop
+        registry: ${{ secrets.REGISTRY }}
+        githubOrg: pandemiia
+        dockerfile: docker/app/Dockerfile_develop
+        tag: ${{ github.sha }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.CUSTOM_TOKEN }} 
 
   deploy:
-    #needs: [build]
+    needs: [build]
 
     runs-on: ubuntu-latest
 
@@ -24,10 +38,10 @@ jobs:
       with:
           inventory: ansible/inventory
           playbook: ansible/develop.yml
-          extra_vars: tag=${{ github.sha }}  CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }}
+          extra_vars: tag=${{ github.sha }} custom_token=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }} image=${{ secrets.IMAGE}} registry=${{ secrets.REGISTRY}}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       env:
-          ANSIBLE_CONFIG: './ansible.cfg'
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
 
 
 

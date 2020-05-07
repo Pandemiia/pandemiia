@@ -30,7 +30,7 @@
 
   - name: copy env for docker compose
     copy:
-      content: "IMAGE=docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:{{tag}}"
+      content: "IMAGE={{image}}:{{tag}}"
       dest: "{{project.dir}}/.env"     
 
 ######## DATABASE BACKUP ########
@@ -93,13 +93,13 @@
 
   - name: docker login
     docker_login:
-      registry: docker.pkg.github.com/pandemiia/pandemiia/pandemiia
+      registry: "{{registry}}"
       username: "{{actor}}"
-      password: "{{CUSTOM_TOKEN}}" 
+      password: "{{custom_token}}" 
     no_log: true
 
   - name: docker pull
-    shell: "docker pull docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:{{ tag }}"
+    shell: "docker pull {{ image }}:{{ tag }}"
 
   - name: build docker compose
     shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} up -d --build"
