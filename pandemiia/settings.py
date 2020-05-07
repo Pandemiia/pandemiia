@@ -21,12 +21,6 @@ env = environ.Env(
     POSTGRES_USER=(str, ''),
     POSTGRES_PASSWORD=(str, ''),
 
-    # Email
-    DJANGO_EMAIL_URL=(environ.Env.email_url_config, 'consolemail://'),
-    DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
-    DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
-    DJANGO_SERVER_EMAIL=(str, 'root@localhost.com'),
-
     DJANGO_CELERY_BROKER_URL=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_BACKEND=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_ALWAYS_EAGER=(bool, False),
@@ -59,22 +53,6 @@ DATABASES = {
 }
 
 SITE_ID = env('DJANGO_SITE_ID')
-
-# Django Email Server
-# https://docs.djangoproject.com/en/2.2/ref/settings/#email-backend
-# ------------------------------------------------------------------------------
-EMAIL_URL = env.email_url('DJANGO_EMAIL_URL')
-EMAIL_BACKEND = EMAIL_URL['EMAIL_BACKEND']
-EMAIL_HOST = EMAIL_URL.get('EMAIL_HOST', '')
-EMAIL_HOST_PASSWORD = EMAIL_URL.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_HOST_USER = EMAIL_URL.get('EMAIL_HOST_USER', '')
-EMAIL_PORT = EMAIL_URL.get('EMAIL_PORT', '')
-EMAIL_USE_SSL = 'EMAIL_USE_SSL' in EMAIL_URL
-EMAIL_USE_TLS = 'EMAIL_USE_TLS' in EMAIL_URL
-EMAIL_FILE_PATH = EMAIL_URL.get('EMAIL_FILE_PATH', '')
-EMAIL_SUBJECT_PREFIX = ''
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
 
 
 # SECURE_SSL_REDIRECT = False
@@ -124,19 +102,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-# Email configs
-EMAIL_URL = env.email_url('DJANGO_EMAIL_URL')
-EMAIL_BACKEND = EMAIL_URL['EMAIL_BACKEND']
-EMAIL_HOST = EMAIL_URL.get('EMAIL_HOST', '')
-EMAIL_HOST_PASSWORD = EMAIL_URL.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_HOST_USER = EMAIL_URL.get('EMAIL_HOST_USER', '')
-EMAIL_PORT = EMAIL_URL.get('EMAIL_PORT', '')
-EMAIL_USE_SSL = 'EMAIL_USE_SSL' in EMAIL_URL
-EMAIL_USE_TLS = 'EMAIL_USE_TLS' in EMAIL_URL
-EMAIL_FILE_PATH = EMAIL_URL.get('EMAIL_FILE_PATH', '')
-EMAIL_SUBJECT_PREFIX = ''
-DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'pandemiia.ua@gmail.com'
+EMAIL_HOST_PASSWORD = 'Pand4sFfemi3ia'
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
