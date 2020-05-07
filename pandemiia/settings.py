@@ -27,7 +27,6 @@ env = environ.Env(
     DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_SERVER_EMAIL=(str, 'root@localhost.com'),
 
-
     DJANGO_CELERY_BROKER_URL=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_BACKEND=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_ALWAYS_EAGER=(bool, False),
