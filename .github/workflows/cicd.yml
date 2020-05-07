@@ -20,7 +20,7 @@ jobs:
 
     - name: Check ssh
       run: |
-        echo {{ secrets.SSH_PRIVATE_KEY }}
+        echo ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Execute Ansible Playbook
       uses: saubermacherag/ansible-playbook-docker-action@v1.3
