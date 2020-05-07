@@ -18,13 +18,10 @@ jobs:
     - uses: actions/checkout@v2
       name: Check out code
 
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2.0.2
+    - name: webfactory/ssh-agent
+      uses: webfactory/ssh-agent@v0.2.0
       with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        name: # optional, default is id_rsa
-        known_hosts: # default is 
-        config: # optional, default is 
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Execute Ansible Playbook
       uses: saubermacherag/ansible-playbook-docker-action@v1.3
