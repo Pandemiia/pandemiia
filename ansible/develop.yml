@@ -43,7 +43,7 @@
     register: docker_db
 
   - name: Check settings.DATABASES
-    shell: "{{ compose_bin.stdout }} -f develop.yml--project-name {{ project.name }} exec app python -c \"import os;
+    shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} exec app python -c \"import os;
         os.chdir('/app');
         from django.conf import settings;
         name = settings.DATABASES;
