@@ -8,6 +8,8 @@ on:
 jobs:
 
 
+
+
   deploy:
     #needs: [build]
 
@@ -16,10 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       name: Check out code
-    
-    - name: lol
-      run: |
-        echo ${{ github.head_re }}
 
     - name: Play Ansible Playbook
       uses: arillso/action.playbook@0.0.2
@@ -29,7 +27,7 @@ jobs:
           extra_vars: tag=${{ github.sha }}  CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       env:
-          ANSIBLE_HOST_KEY_CHECKING: 'false'
+          ANSIBLE_CONFIG: $(eval echo `readlink -f ansible/ansible.cfg`)
 
 
 
