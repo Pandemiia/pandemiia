@@ -20,9 +20,9 @@ jobs:
     - name: Play Ansible Playbook
       uses: arillso/action.playbook@0.0.2
       with:
-          inventory: 'ansible/inventory'
-          playbook: 'ansible/develop.yml'
-          extra_vars: "-e tag=${{ github.sha }} -e CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} -e actor=${{ github.actor }}"
+          inventory: ansible/inventory
+          playbook: ansible/develop.yml
+          extra_vars: tag=${{ github.sha }}  CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
 
