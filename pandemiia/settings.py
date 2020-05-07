@@ -21,10 +21,13 @@ env = environ.Env(
     POSTGRES_USER=(str, ''),
     POSTGRES_PASSWORD=(str, ''),
 
+    # Email
     DJANGO_EMAIL_URL=(environ.Env.email_url_config, 'consolemail://'),
-    DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
+    DJANGO_DEFAULT_FROM_EMAIL=(str, 'admin@example.com'),
     DJANGO_SERVER_EMAIL=(str, 'root@localhost.com'),
+
+
     DJANGO_CELERY_BROKER_URL=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_BACKEND=(str, 'redis://localhost:6379/0'),
     DJANGO_CELERY_ALWAYS_EAGER=(bool, False),
@@ -57,10 +60,18 @@ DATABASES = {
 }
 
 # Email configs
-EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND')
+EMAIL_URL = env.email_url('DJANGO_EMAIL_URL')
+EMAIL_BACKEND = EMAIL_URL['EMAIL_BACKEND']
+EMAIL_HOST = EMAIL_URL.get('EMAIL_HOST', '')
+EMAIL_HOST_PASSWORD = EMAIL_URL.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_USER = EMAIL_URL.get('EMAIL_HOST_USER', '')
+EMAIL_PORT = EMAIL_URL.get('EMAIL_PORT', '')
+EMAIL_USE_SSL = 'EMAIL_USE_SSL' in EMAIL_URL
+EMAIL_USE_TLS = 'EMAIL_USE_TLS' in EMAIL_URL
+EMAIL_FILE_PATH = EMAIL_URL.get('EMAIL_FILE_PATH', '')
+EMAIL_SUBJECT_PREFIX = ''
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
-SITE_ID = env('DJANGO_SITE_ID')
 # SECURE_SSL_REDIRECT = False
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
