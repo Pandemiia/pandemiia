@@ -18,6 +18,10 @@ jobs:
     - uses: actions/checkout@v2
       name: Check out code
 
+    - name: Check out code
+      run: |
+        echo ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: Execute Ansible Playbook
       uses: saubermacherag/ansible-playbook-docker-action@v1.3
       with:
@@ -26,7 +30,7 @@ jobs:
         # If inventoryFile is set you can also specify a custom roles path to install your required roles in.
         rolesPath: # optional
         # Keyfile to use for host connections.
-        keyFile: "pandemiia_key"
+        keyFile: 
         extraVars: "-e tag=${{ github.sha }} -e CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} -e actor=${{ github.actor }}"
         # File containing extra vars.
         extraFile: # optional
