@@ -59,9 +59,8 @@ DATABASES = {
     }
 }
 
-<<<<<<< HEAD
 SITE_ID = env('DJANGO_SITE_ID')
-=======
+
 # Django Email Server
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-backend
 # ------------------------------------------------------------------------------
@@ -83,7 +82,7 @@ SERVER_EMAIL = env('DJANGO_SERVER_EMAIL')
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True
 
->>>>>>> origin/dev
+
 # Application definition
 INSTALLED_APPS = [
     # django apps
