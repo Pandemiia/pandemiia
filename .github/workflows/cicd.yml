@@ -16,6 +16,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       name: Check out code
+    
+    - uses: lol
+      run: |
+        echo ${{ github.ref }}
 
     - name: Play Ansible Playbook
       uses: arillso/action.playbook@0.0.2
