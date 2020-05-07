@@ -93,7 +93,7 @@
 
   - name: docker login
     docker_login:
-      registry: "{{registry}}"
+      registry: docker.pkg.github.com
       username: "{{actor}}"
       password: "{{custom_token}}" 
     no_log: true

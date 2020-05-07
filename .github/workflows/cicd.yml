@@ -17,7 +17,7 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
         image: pandemiia/develop
-        registry: ${{ secrets.REGISTRY }}
+        registry: docker.pkg.github.com
         githubOrg: pandemiia
         dockerfile: docker/app/Dockerfile_develop
         tag: ${{ github.sha }}
@@ -38,7 +38,7 @@ jobs:
       with:
           inventory: ansible/inventory
           playbook: ansible/develop.yml
-          extra_vars: tag=${{ github.sha }} custom_token=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }} image=${{ secrets.IMAGE}} registry=${{ secrets.REGISTRY}}
+          extra_vars: tag=${{ github.sha }} custom_token=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }} image=${{ secrets.IMAGE}}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       env:
           ANSIBLE_HOST_KEY_CHECKING: 'false'
