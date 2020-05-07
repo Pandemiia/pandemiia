@@ -24,6 +24,8 @@ jobs:
           playbook: ansible/develop.yml
           extra_vars: tag=${{ github.sha }}  CUSTOM_TOKEN=${{ secrets.CUSTOM_TOKEN }} actor=${{ github.actor }}
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
 
 
 
