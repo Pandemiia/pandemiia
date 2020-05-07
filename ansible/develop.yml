@@ -33,62 +33,7 @@
       content: "IMAGE=docker.pkg.github.com/pandemiia/pandemiia/pandemiia-image:{{tag}}"
       dest: "{{project.dir}}/.env"     
 
-######## DATABASE BACKUP ########
-  - name: register app docker container
-    shell: "docker ps -f name=app | grep app | cat"
-    register: docker_app
-    
-  - name: register db docker container
-    shell: "docker ps -f name=db | grep db | cat"
-    register: docker_db
 
-  - name: Check settings.DATABASES
-    shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} exec app python -c \"import os;
-        os.chdir('/app');
-        from django.conf import settings;
-        name = settings.DATABASES;
-        print(name)\""
-    register: result
-    args:
-      chdir: "{{ project.dir }}"
-    when: docker_db.stdout != "" and docker_app.stdout != ""
-
-  - set_fact:
-      dictionary: "{{ result.stdout }}"
-    when: docker_db.stdout != "" and docker_app.stdout != ""
-
-  - name: backup postgresql database
-    shell: "{{ compose_bin.stdout }} -f develop.yml --project-name {{ project.name }} exec db pg_dump
-         --no-owner --host={{ dictionary.default.HOST }}
-         --port={{ dictionary.default.PORT }}
-         --username={{ dictionary.default.USER }}
-         --no-password {{ dictionary.default.NAME }} | gzip >
-         {{ project.base_dir }}/backup/db/{{ project.name }}-$(date +%Y-%m-%d-%H%M%S).sql.gz"
-    environment:
-      PGPASSWORD: "{{dictionary.default.PASSWORD}}"
-    args:
-      chdir: "{{ project.dir }}"
-    when: docker_db.stdout != "" and docker_app.stdout != ""
-
-  - name: Check latest files
-    shell: "find {{project.base_dir}}/backup/db -type f -printf '%TY-%Tm-%Td %TT %p\n' | sort | tail -n 5 | awk '{print $3}'"
-    register: dont_delete_file
-
-  - name: Check all files
-    shell: "ls -1 {{project.base_dir}}/backup/db"
-    register: all_files
-
-  - name: Check all directories
-    shell: "find {{project.base_dir}}/backup/db -type d -printf '%TY-%Tm-%Td %TT %p\n' | sort | awk '{print $3}'"
-    register: dont_delete_dir
-
-  - name: Remove all oldest files 
-    file: >
-      path={{project.base_dir}}/backup/db/{{item}}
-      state=absent
-    with_items: "{{all_files.stdout_lines|default([])}}" 
-    when: item not in "{{dont_delete_file.stdout_lines}}" and item not in "{{dont_delete_dir.stdout_lines}}"
-######## DATABASE BACKUP ########
 
 
   - name: docker login
