@@ -19,7 +19,7 @@ jobs:
     
     - name: lol
       run: |
-        echo ${{ github.ref }}
+        echo ${{ github.head_re }}
 
     - name: Play Ansible Playbook
       uses: arillso/action.playbook@0.0.2
