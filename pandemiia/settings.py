@@ -33,7 +33,6 @@ env = environ.Env(
     DJANGO_HEALTH_CHECK_BODY=(str, 'Success'),
     DJANGO_SITE_ID=(int, 1)
 )
-environ.Env.read_env()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG')
