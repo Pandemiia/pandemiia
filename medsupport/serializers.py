@@ -130,8 +130,9 @@ class SolutionSerializer(ModelSerializer):
         model = Solution
         fields = (
             'solution_type', 'code', 'name', 'need_description', 'definition',
-            'main_image', 'attachment', 'instruction', 'materials', 'tools',
-            'approved_by', 'comment', 'images', 'source',
+            'manufacturing_options', 'main_image', 'attachment', 'instruction',
+            'source', 'materials', 'tools', 'approved_by', 'comment', 'images',
+            'source',
         )
 
 
