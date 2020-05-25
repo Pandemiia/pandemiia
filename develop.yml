@@ -1,23 +1,8 @@
 version: '3.4'
 
 services:
-  db:
-    image: postgres:10.12-alpine
-    networks:
-      - db
-    volumes:
-      - db:/var/lib/postgresql/data
-    env_file:
-      - env/db.env
-    logging:
-      driver: syslog
-      options:
-        tag: docker/db
-
   app:
     image: "${IMAGE}"
-    networks:
-      - db
       - backend
     volumes:
       - /home/admin/public/:/home/admin/public/
@@ -28,8 +13,6 @@ services:
     env_file:
       - env/app.env
       - env/db.env
-    depends_on:
-      - db
     logging:
       driver: syslog
       options:
@@ -56,14 +39,6 @@ services:
       options:
         tag: docker/nginx
 
-
-volumes:
-  db:
-    name: db
-    driver: local
-
 networks:
-  db:
-    driver: bridge
   backend:
     driver: bridge
