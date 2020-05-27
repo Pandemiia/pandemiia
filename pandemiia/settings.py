@@ -22,13 +22,13 @@ env = environ.Env(
     POSTGRES_PASSWORD=(str, ''),
 
     # AWS
-    DJANGO_USE_S3=(bool, False),
-    DJANGO_AWS_ACCESS_KEY_ID=(str, ""),
-    DJANGO_AWS_SECRET_ACCESS_KEY=(str, ""),
-    DJANGO_AWS_STORAGE_BUCKET_NAME=(str, ""),
-    DJANGO_AWS_S3_CUSTOM_DOMAIN=(str, ""),
-    DJANGO_CLOUDFRONT_KEY_PATH=(str, ""),
-    DJANGO_CLOUDFRONT_KEY_ID=(str, ""),
+    #DJANGO_USE_S3=(bool, False),
+    #DJANGO_AWS_ACCESS_KEY_ID=(str, ""),
+    #DJANGO_AWS_SECRET_ACCESS_KEY=(str, ""),
+    #DJANGO_AWS_STORAGE_BUCKET_NAME=(str, ""),
+    #DJANGO_AWS_S3_CUSTOM_DOMAIN=(str, ""),
+    #DJANGO_CLOUDFRONT_KEY_PATH=(str, ""),
+    #DJANGO_CLOUDFRONT_KEY_ID=(str, ""),
 
     #Email
     DJANGO_EMAIL_BACKEND=(str, 'django.core.mail.backends.smtp.EmailBackend'),
@@ -268,17 +268,17 @@ USE_S3 = env("DJANGO_USE_S3")
 # django-storages: Amazon S3
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 # ------------------------------------------------------------------------------
-if USE_S3:
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
-    AWS_DEFAULT_ACL = None
-    AWS_QUERYSTRING_AUTH = False
-    AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN")
-    AWS_S3_MAX_MEMORY_SIZE = 10  # roll over to temporary file on disk if over limit
-    AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
-    CLOUDFRONT_KEY_PATH = env("DJANGO_CLOUDFRONT_KEY_PATH")
-    CLOUDFRONT_KEY_ID = env("DJANGO_CLOUDFRONT_KEY_ID")
-else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+#if USE_S3:
+#    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+#    AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
+#    AWS_DEFAULT_ACL = None
+#    AWS_QUERYSTRING_AUTH = False
+#    AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN")
+#    AWS_S3_MAX_MEMORY_SIZE = 10  # roll over to temporary file on disk if over limit
+#    AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
+#    AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
+#    CLOUDFRONT_KEY_PATH = env("DJANGO_CLOUDFRONT_KEY_PATH")
+#    CLOUDFRONT_KEY_ID = env("DJANGO_CLOUDFRONT_KEY_ID")
+#else:
+#    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
